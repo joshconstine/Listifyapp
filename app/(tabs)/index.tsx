@@ -2,19 +2,21 @@ import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
 
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Recipe } from "../../types/recipe";
 import { Link } from "expo-router";
 import { Image } from "react-native";
 import Checkbox from "expo-checkbox";
-
+import {
+  ISelectedRecipe,
+  SelectedRecipesContext,
+} from "./selectedRecipesContext";
 export default function TabOneScreen() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedRecipes, setSelectedRecipes] = useState<
-    { isChecked: boolean; recipeId: number }[]
-  >([]);
-
+  const { selectedRecipes, setSelectedRecipes } = useContext(
+    SelectedRecipesContext
+  );
   useEffect(() => {
     const selectedRecipes = recipes.map((recipe) => ({
       isChecked: false,
@@ -24,15 +26,17 @@ export default function TabOneScreen() {
   }, [recipes]);
 
   const toggleRecipe = (recipeId: number) => {
-    const newSelectedRecipes = selectedRecipes.map((recipe) => {
-      if (recipe.recipeId === recipeId) {
-        return {
-          ...recipe,
-          isChecked: !recipe.isChecked,
-        };
+    const newSelectedRecipes = selectedRecipes.map(
+      (recipe: ISelectedRecipe) => {
+        if (recipe.recipeId === recipeId) {
+          return {
+            ...recipe,
+            isChecked: !recipe.isChecked,
+          };
+        }
+        return recipe;
       }
-      return recipe;
-    });
+    );
     setSelectedRecipes(newSelectedRecipes);
   };
 
