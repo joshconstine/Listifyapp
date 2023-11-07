@@ -1,11 +1,9 @@
 import React, { createContext, useContext, useState } from "react";
-export interface ISelectedRecipe {
-  recipeId: number;
-  isChecked: boolean;
-}
+import { Recipe } from "../../types/recipe";
+
 interface SelectedRecipesContextInterface {
-  selectedRecipes: ISelectedRecipe[];
-  setSelectedRecipes: any;
+  selectedRecipes: Recipe[];
+  setSelectedRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
 }
 
 const initialValue: SelectedRecipesContextInterface = {

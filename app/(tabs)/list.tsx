@@ -2,7 +2,12 @@ import { StyleSheet } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
+import { useContext } from "react";
 export default function ListScreen() {
+  const { selectedRecipes, setSelectedRecipes } = useContext(
+    SelectedRecipesContext
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>List</Text>
@@ -11,11 +16,13 @@ export default function ListScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <SelectedRecipesContext.Consumer>
-        {({ selectedRecipes }) => (
-          <Text>{JSON.stringify(selectedRecipes)}</Text>
-        )}
-      </SelectedRecipesContext.Consumer>
+      <View>
+        {selectedRecipes.map((selectedRecipe) => (
+          <View key={selectedRecipe.Recipe_id}>
+            <Text>{selectedRecipe.Name}</Text>
+          </View>
+        ))}
+      </View>
     </View>
   );
 }

@@ -7,37 +7,31 @@ import { Recipe } from "../../types/recipe";
 import { Link } from "expo-router";
 import { Image } from "react-native";
 import Checkbox from "expo-checkbox";
-import {
-  ISelectedRecipe,
-  SelectedRecipesContext,
-} from "./selectedRecipesContext";
+import { SelectedRecipesContext } from "./selectedRecipesContext";
 export default function TabOneScreen() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { selectedRecipes, setSelectedRecipes } = useContext(
     SelectedRecipesContext
   );
-  useEffect(() => {
-    const selectedRecipes = recipes.map((recipe) => ({
-      isChecked: false,
-      recipeId: recipe.Recipe_id,
-    }));
-    setSelectedRecipes(selectedRecipes);
-  }, [recipes]);
 
-  const toggleRecipe = (recipeId: number) => {
-    const newSelectedRecipes = selectedRecipes.map(
-      (recipe: ISelectedRecipe) => {
-        if (recipe.recipeId === recipeId) {
-          return {
-            ...recipe,
-            isChecked: !recipe.isChecked,
-          };
-        }
-        return recipe;
-      }
-    );
-    setSelectedRecipes(newSelectedRecipes);
+  const toggleRecipe = (recipe: Recipe) => {
+    let newSelectedRecipes = [];
+    if (
+      selectedRecipes.some(
+        (selectedRecipe) => selectedRecipe.Recipe_id === recipe.Recipe_id
+      )
+    ) {
+      newSelectedRecipes = [
+        ...selectedRecipes.filter(
+          (selectedRecipe) => selectedRecipe.Recipe_id !== recipe.Recipe_id
+        ),
+      ];
+      setSelectedRecipes(newSelectedRecipes);
+    } else {
+      newSelectedRecipes = [...selectedRecipes, recipe];
+      setSelectedRecipes(newSelectedRecipes);
+    }
   };
 
   const getRecipes = async () => {
@@ -80,10 +74,10 @@ export default function TabOneScreen() {
                 <Text style={styles.noRecipesText}>No recipes found</Text>
               )}
               {recipes.map((recipe: Recipe) => {
-                const isChecked = selectedRecipes.find(
+                const isChecked = selectedRecipes.some(
                   (selectedRecipe) =>
-                    selectedRecipe.recipeId === recipe.Recipe_id
-                )?.isChecked;
+                    selectedRecipe.Recipe_id === recipe.Recipe_id
+                );
                 return (
                   <View key={recipe.Recipe_id}>
                     <Link href={`/recipe/${recipe.Recipe_id}`}>
@@ -95,7 +89,7 @@ export default function TabOneScreen() {
                         <Text style={styles.recipeName}>{recipe.Name}</Text>
                         <Checkbox
                           value={isChecked}
-                          onValueChange={() => toggleRecipe(recipe.Recipe_id)}
+                          onValueChange={() => toggleRecipe(recipe)}
                           color={isChecked ? "#4630EB" : undefined}
                         />
                       </View>
