@@ -3,22 +3,31 @@ import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
 import { useContext, useEffect, useState } from "react";
-import { Ingredient, Recipe } from "../../types/recipe";
+import { IngredientWithQuantityAndType, Recipe } from "../../types/recipe";
+
+interface IIngredientType {
+  ingredientType: string;
+  ingredients: IngredientWithQuantityAndType[];
+}
+
 export default function ListScreen() {
   const { selectedRecipes, setSelectedRecipes } = useContext(
     SelectedRecipesContext
   );
-  const [listIngredients, setListIngredients] = useState<Ingredient[]>([]);
+  const [listIngredients, setListIngredients] = useState<IIngredientType[]>([]);
 
   const setIngredients = () => {
     const allIngredients = selectedRecipes.reduce(
-      (p: Ingredient[], recipe: Recipe) => {
+      (p: IngredientWithQuantityAndType[], recipe: Recipe) => {
         return [...p, ...recipe.Ingredients];
       },
       []
     );
     const uniqueIngredients = allIngredients.reduce(
-      (p: Ingredient[], ingredient: Ingredient) => {
+      (
+        p: IngredientWithQuantityAndType[],
+        ingredient: IngredientWithQuantityAndType
+      ) => {
         const existingIngredient = p.find(
           (pIngredient) => pIngredient.Name === ingredient.Name
         );
@@ -31,7 +40,25 @@ export default function ListScreen() {
       },
       []
     );
-    setListIngredients(uniqueIngredients);
+    const ingredientsByType = uniqueIngredients.reduce(
+      (p: IIngredientType[], ingredient: IngredientWithQuantityAndType) => {
+        const existingIngredientType = p.find(
+          (pIngredientType) =>
+            pIngredientType.ingredientType === ingredient.Ingredient_Type_Name
+        );
+        if (existingIngredientType) {
+          existingIngredientType.ingredients.push(ingredient);
+        } else {
+          p.push({
+            ingredientType: ingredient.Ingredient_Type_Name,
+            ingredients: [ingredient],
+          });
+        }
+        return p;
+      },
+      []
+    );
+    setListIngredients(ingredientsByType);
   };
 
   useEffect(() => {
@@ -39,11 +66,13 @@ export default function ListScreen() {
   }, [selectedRecipes]);
 
   const onRemoveIngredient = (ingredientId: number) => {
-    const newListIngredients = listIngredients.filter(
-      (ingredient) => ingredient.Ingredient_id !== ingredientId
-    );
-
-    setListIngredients(newListIngredients);
+    const newSelectedRecipes = selectedRecipes.map((recipe) => {
+      const newIngredients = recipe.Ingredients.filter(
+        (ingredient) => ingredient.Ingredient_id !== ingredientId
+      );
+      return { ...recipe, Ingredients: newIngredients };
+    });
+    setSelectedRecipes(newSelectedRecipes);
   };
 
   return (
@@ -64,17 +93,34 @@ export default function ListScreen() {
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Your Ingredients</Text>
-          {listIngredients.map((ingredient) => (
-            <View
-              key={ingredient.Ingredient_id + ingredient.Name}
-              style={styles.listItem}
-            >
-              <Text>{ingredient.Name}</Text>
-              <TouchableOpacity
-                onPress={() => onRemoveIngredient(ingredient.Ingredient_id)}
-              >
-                <Text style={styles.removeButton}>Remove</Text>
-              </TouchableOpacity>
+          {listIngredients.map((ingredientType) => (
+            <View key={ingredientType.ingredientType}>
+              <Text style={styles.sectionTitle}>
+                {ingredientType.ingredientType}
+              </Text>
+              {ingredientType.ingredients.map((ingredient) => (
+                <View
+                  key={ingredient.Ingredient_id + ingredient.Name}
+                  style={styles.listItem}
+                >
+                  <View style={styles.ingredientListItem}>
+                    <Text style={styles.ingredient}>{ingredient.Name}</Text>
+                    <Text>{`${ingredient.Quantity}: ${
+                      ingredient.Quantity_type
+                    }${
+                      ingredient.Quantity > 1 &&
+                      ingredient.Quantity_type_id !== 1
+                        ? "s"
+                        : ""
+                    }`}</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => onRemoveIngredient(ingredient.Ingredient_id)}
+                  >
+                    <Text style={styles.removeButton}>Remove</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
           ))}
         </View>
@@ -115,5 +161,14 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     color: "red",
+  },
+  ingredient: {
+    fontWeight: "bold",
+  },
+  ingredientListItem: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    marginBottom: 10,
   },
 });

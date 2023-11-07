@@ -5,7 +5,7 @@ export type Recipe = {
   Photos: string[];
   Tags: Tag[];
   TagString: string;
-  Ingredients: Ingredient[];
+  Ingredients: IngredientWithQuantityAndType[];
 };
 
 export type Tag = {
@@ -13,8 +13,10 @@ export type Tag = {
   Name: string;
 };
 
-export type Ingredient = {
+export type IngredientWithQuantityAndType = {
   Ingredient_id: number;
+  Ingredient_Type_id: number;
+  Ingredient_Type_Name: string;
   Name: string;
   Quantity: number;
   Quantity_type: string;
