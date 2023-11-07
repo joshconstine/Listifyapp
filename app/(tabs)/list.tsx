@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
@@ -48,36 +48,37 @@ export default function ListScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>List</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255, 255, 255, 0.1)"
       />
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
-        {selectedRecipes.map((selectedRecipe) => (
-          <View key={selectedRecipe.Recipe_id} style={styles.listItem}>
-            <Text>{selectedRecipe.Name}</Text>
-          </View>
-        ))}
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Your Ingredients</Text>
-        {listIngredients.map((ingredient) => (
-          <View
-            key={ingredient.Ingredient_id + ingredient.Name}
-            style={styles.listItem}
-          >
-            <Text>{ingredient.Name}</Text>
-            <TouchableOpacity
-              onPress={() => onRemoveIngredient(ingredient.Ingredient_id)}
+      <ScrollView>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
+          {selectedRecipes.map((selectedRecipe) => (
+            <View key={selectedRecipe.Recipe_id} style={styles.listItem}>
+              <Text>{selectedRecipe.Name}</Text>
+            </View>
+          ))}
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Your Ingredients</Text>
+          {listIngredients.map((ingredient) => (
+            <View
+              key={ingredient.Ingredient_id + ingredient.Name}
+              style={styles.listItem}
             >
-              <Text style={styles.removeButton}>Remove</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
+              <Text>{ingredient.Name}</Text>
+              <TouchableOpacity
+                onPress={() => onRemoveIngredient(ingredient.Ingredient_id)}
+              >
+                <Text style={styles.removeButton}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 }
