@@ -52,7 +52,22 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerTransparent: true,
+            headerTintColor: "blue",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="recipe/[slug]"
+          options={{
+            headerTransparent: true,
+            headerTitle: "",
+            headerTintColor: "blue",
+          }}
+        />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>
