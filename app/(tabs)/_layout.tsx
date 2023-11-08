@@ -1,6 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import { Pressable, useColorScheme } from "react-native";
+import { Entypo } from "@expo/vector-icons";
 
 import Colors from "../../constants/Colors";
 import { useContext, useState } from "react";
@@ -33,7 +34,9 @@ export default function TabLayout() {
           name="index"
           options={{
             title: "Recipes",
-            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+            tabBarIcon: ({ color }) => (
+              <Entypo name="bowl" size={24} color={color} />
+            ),
             headerRight: () => (
               <Link href="/modal" asChild>
                 <Pressable>
@@ -54,7 +57,7 @@ export default function TabLayout() {
           name="list"
           options={{
             title: "List",
-            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+            tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
           }}
         />
       </Tabs>
