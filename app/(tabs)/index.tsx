@@ -81,12 +81,20 @@ export default function TabOneScreen() {
                           source={{ uri: recipe.Photos[0] }}
                           style={styles.recipeImage}
                         />
-                        <Text style={styles.recipeName}>{recipe.Name}</Text>
-                        <Checkbox
-                          value={isChecked}
-                          onValueChange={() => toggleRecipe(recipe)}
-                          color={isChecked ? "#4630EB" : undefined}
-                        />
+                        <View
+                          style={{
+                            flex: 1,
+                            alignItems: "flex-end",
+                            gap: 2,
+                          }}
+                        >
+                          <Text style={styles.recipeName}>{recipe.Name}</Text>
+                          <Checkbox
+                            value={isChecked}
+                            onValueChange={() => toggleRecipe(recipe)}
+                            color={isChecked ? "#4630EB" : undefined}
+                          />
+                        </View>
                       </View>
                     </Link>
                   </View>
@@ -111,18 +119,23 @@ const styles = StyleSheet.create({
   },
   recipesContainer: {
     marginBottom: 20,
+    width: "100%",
+    flex: 1,
+    gap: 4,
   },
   recipeItem: {
     marginBottom: 20,
-    alignItems: "center",
     borderWidth: 1,
+    flexDirection: "row",
     borderColor: "#ccc",
     padding: 16,
+    width: 360,
+    justifyContent: "space-between",
     borderRadius: 10,
   },
   recipeImage: {
-    width: 340,
-    height: 200,
+    width: 100,
+    height: 60,
     borderRadius: 10,
   },
   recipeName: {
