@@ -147,6 +147,8 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 20,
+    flex: 1,
+    gap: 16,
   },
   sectionTitle: {
     fontSize: 18,
