@@ -23,7 +23,7 @@ export default function IngredientsContainer({ recipe }: Props) {
           <View style={styles.servingsButtonContainer}>
             <Button
               title="-"
-              disabled={servings === 1}
+              disabled={servings === 0}
               color={"#3c959c"}
               onPress={(s) => setServings((s) => s - 1)}
             />
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: "darkgrey",
     opacity: 0.5,
     padding: 8,
+    paddingVertical: 12,
     width: "100%",
     borderRadius: 5,
   },

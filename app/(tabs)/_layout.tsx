@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
-import { Pressable, useColorScheme } from "react-native";
-import { Entypo } from "@expo/vector-icons";
+import { Pressable, View, useColorScheme } from "react-native";
+import { AntDesign, Entypo, Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../../constants/Colors";
@@ -28,7 +28,14 @@ export default function TabLayout() {
     >
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          tabBarActiveTintColor: "black",
+          tabBarStyle: {
+            height: 70,
+            backgroundColor: "white",
+            borderTopColor: "transparent",
+            paddingHorizontal: 40,
+          },
+          tabBarShowLabel: false,
         }}
       >
         <Tabs.Screen
@@ -36,37 +43,57 @@ export default function TabLayout() {
           options={{
             title: "Recipes",
             tabBarIcon: ({ color }) => (
-              <Entypo name="bowl" size={24} color={color} />
+              <AntDesign name="find" size={24} color={color} />
             ),
-            headerRight: () => (
-              <Link href="/modal" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <FontAwesome
-                      name="info-circle"
-                      size={25}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
+            // headerRight: () => (
+            //   <Link href="/modal" asChild
+            //     <Pressable>
+            //       {({ pressed }) => (
+            //         <FontAwesome
+            //           name="info-circle"
+            //           size={20}
+            //           color={Colors[colorScheme ?? "light"].text}
+            //           style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+            //         />
+            //       )}
+            //     </Pressable>
+            //   </Link>
+            // ),
+          }}
+        />
+        <Tabs.Screen
+          name="search"
+          options={{
+            title: "",
+            tabBarIcon: ({ color }) => (
+              <Feather name="search" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="createRecipe"
+          options={{
+            title: "",
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="add-circle-outline" size={24} color={color} />
             ),
           }}
         />
         <Tabs.Screen
           name="list"
           options={{
-            title: "List",
-            tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+            title: "",
+            tabBarIcon: ({ color }) => (
+              <Entypo name="shopping-basket" size={24} color={color} />
+            ),
           }}
         />
         <Tabs.Screen
-          name="createRecipe"
+          name="profile"
           options={{
-            title: "Create Recipe",
+            title: "",
             tabBarIcon: ({ color }) => (
-              <Ionicons name="add" size={24} color={color} />
+              <AntDesign name="user" size={24} color={color} />
             ),
           }}
         />
