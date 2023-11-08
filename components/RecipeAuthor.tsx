@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "bold",
     color: Colors.accent.darker,
   },

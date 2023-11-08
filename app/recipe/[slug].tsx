@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingHorizontal: 32,
     marginTop: 96,
-    gap: 8,
+    gap: 16,
     alignItems: "flex-start",
   },
   ingredientContainer: {
@@ -102,17 +102,15 @@ const styles = StyleSheet.create({
   recipeImage: {
     width: "100%",
     height: 200,
-    marginVertical: 20,
-    borderRadius: 10,
+    marginVertical: 8,
+    borderRadius: 20,
   },
   description: {
     fontSize: 16,
-    lineHeight: 24,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    marginTop: 16,
   },
   tag: {
     fontSize: 16,
