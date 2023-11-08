@@ -1,10 +1,16 @@
-import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
 import { Image } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
 import { useContext, useEffect, useState } from "react";
 import { IngredientWithQuantityAndType, Recipe } from "../../types/recipe";
+import { Link } from "expo-router";
 
 interface IIngredientType {
   ingredientType: string;
@@ -87,23 +93,28 @@ export default function ListScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
           {selectedRecipes.map((selectedRecipe) => (
-            <View key={selectedRecipe.Recipe_id} style={styles.listItem}>
-              <Image
-                source={{ uri: selectedRecipe.Photos[0] }}
-                style={styles.image}
-              />
-              <Text
-                style={{
-                  fontWeight: "bold",
-                }}
-              >
-                {selectedRecipe.Name}
-              </Text>
-            </View>
+            <Link
+              href={`/recipe/${selectedRecipe.Recipe_id}`}
+              key={selectedRecipe.Recipe_id}
+            >
+              <View style={styles.listItem}>
+                <Image
+                  source={{ uri: selectedRecipe.Photos[0] }}
+                  style={styles.image}
+                />
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {selectedRecipe.Name}
+                </Text>
+              </View>
+            </Link>
           ))}
         </View>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Ingredients</Text>
+          <Text style={styles.sectionTitle}> Recipe Ingredients</Text>
           {listIngredients.map((ingredientType) => (
             <View key={ingredientType.ingredientType}>
               <Text style={styles.sectionTitle}>
@@ -112,7 +123,7 @@ export default function ListScreen() {
               {ingredientType.ingredients.map((ingredient) => (
                 <View
                   key={ingredient.Ingredient_id + ingredient.Name}
-                  style={styles.listItem}
+                  style={styles.ingredientItem}
                 >
                   <View style={styles.ingredientListItem}>
                     <Text style={styles.ingredient}>{ingredient.Name}</Text>
@@ -166,10 +177,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
   },
-  listItem: {
+  ingredientItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 10,
+  },
+  listItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
     marginBottom: 10,
   },
   removeButton: {
