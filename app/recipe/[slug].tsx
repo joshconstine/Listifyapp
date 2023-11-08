@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import RecipeInfo from "../../components/RecipeInfo";
 import RecipeAuthor from "../../components/RecipeAuthor";
 import { ScrollView } from "react-native-gesture-handler";
+import IngredientsContainer from "../../components/IngredientsContainer";
 
 export function Page() {
   const { slug } = useLocalSearchParams();
@@ -51,22 +52,7 @@ export function Page() {
           {tag.Name}
         </Text>
       ))} */}
-        <Text style={styles.sectionTitle}>Ingredients</Text>
-        {recipe?.Ingredients?.map((ingredient) => (
-          <View
-            style={styles.ingredientContainer}
-            key={ingredient.Ingredient_id}
-          >
-            <Text style={styles.ingredient}>{ingredient.Name}</Text>
-            <Text style={styles.ingredientQuantity}>
-              {`${ingredient.Quantity} ${ingredient.Quantity_type}${
-                ingredient.Quantity > 1 && ingredient.Quantity_type_id !== 1
-                  ? "s"
-                  : ""
-              }`}
-            </Text>
-          </View>
-        ))}
+        <IngredientsContainer recipe={recipe} />
       </View>
     </ScrollView>
   );
@@ -77,24 +63,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     paddingHorizontal: 32,
-    marginTop: 96,
+    marginTop: 72,
     gap: 16,
     alignItems: "flex-start",
   },
-  ingredientContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    backgroundColor: "darkgrey",
-    opacity: 0.5,
-    padding: 8,
-    borderRadius: 5,
-  },
-  ingredientQuantity: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "grey",
-  },
+
   recipeName: {
     fontSize: 30,
     fontWeight: "bold",
@@ -108,16 +81,9 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
+
   tag: {
     fontSize: 16,
-  },
-  ingredient: {
-    fontSize: 18,
-    fontWeight: "bold",
   },
 });
 
