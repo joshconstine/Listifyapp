@@ -71,24 +71,27 @@ export default function ListScreen() {
       },
       []
     );
-    const ingredientsByType = uniqueIngredients.reduce(
-      (p: IIngredientType[], ingredient: IngredientWithQuantityAndType) => {
-        const existingIngredientType = p.find(
-          (pIngredientType) =>
-            pIngredientType.ingredientType === ingredient.Ingredient_Type_Name
-        );
-        if (existingIngredientType) {
-          existingIngredientType.ingredients.push(ingredient);
-        } else {
-          p.push({
-            ingredientType: ingredient.Ingredient_Type_Name,
-            ingredients: [ingredient],
-          });
-        }
-        return p;
-      },
-      []
-    );
+    const ingredientsByType = uniqueIngredients
+      .reduce(
+        (p: IIngredientType[], ingredient: IngredientWithQuantityAndType) => {
+          const existingIngredientType = p.find(
+            (pIngredientType) =>
+              pIngredientType.ingredientType === ingredient.Ingredient_Type_Name
+          );
+          if (existingIngredientType) {
+            existingIngredientType.ingredients.push(ingredient);
+          } else {
+            p.push({
+              ingredientType: ingredient.Ingredient_Type_Name,
+              ingredients: [ingredient],
+            });
+          }
+          return p;
+        },
+        []
+      )
+      .sort((a, b) => (a.ingredientType < b.ingredientType ? -1 : 1));
+
     setListIngredients(ingredientsByType);
   };
 
