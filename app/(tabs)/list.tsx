@@ -108,11 +108,6 @@ export default function ListScreen() {
 
   return (
     <View style={styles.container}>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255, 255, 255, 0.1)"
-      />
       <ScrollView>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
