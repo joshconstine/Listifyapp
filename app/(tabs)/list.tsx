@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
+import { Image } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
 import { useContext, useEffect, useState } from "react";
@@ -87,7 +88,17 @@ export default function ListScreen() {
           <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
           {selectedRecipes.map((selectedRecipe) => (
             <View key={selectedRecipe.Recipe_id} style={styles.listItem}>
-              <Text>{selectedRecipe.Name}</Text>
+              <Image
+                source={{ uri: selectedRecipe.Photos[0] }}
+                style={styles.image}
+              />
+              <Text
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                {selectedRecipe.Name}
+              </Text>
             </View>
           ))}
         </View>
@@ -172,5 +183,10 @@ const styles = StyleSheet.create({
     gap: 10,
     alignItems: "center",
     marginBottom: 10,
+  },
+  image: {
+    width: 100,
+    height: 60,
+    borderRadius: 10,
   },
 });
