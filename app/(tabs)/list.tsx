@@ -8,6 +8,9 @@ import { IngredientWithQuantityAndType, Recipe } from "../../types/recipe";
 import { Link } from "expo-router";
 import { Swipeable } from "react-native-gesture-handler";
 import { Animated, FlatList, StyleSheet } from "react-native";
+import Collapsible from "react-native-collapsible";
+import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 interface IIngredientType {
   ingredientType: string;
@@ -108,32 +111,56 @@ export default function ListScreen() {
     });
     setSelectedRecipes(newSelectedRecipes);
   };
-
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const toggleCollapsed = () => {
+    setIsCollapsed((p) => {
+      return !p;
+    });
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
-          {selectedRecipes.map((selectedRecipe) => (
-            <Link
-              href={`/recipe/${selectedRecipe.Recipe_id}`}
-              key={selectedRecipe.Recipe_id}
-            >
-              <View style={styles.listItem}>
-                <Image
-                  source={{ uri: selectedRecipe.Photos[0] }}
-                  style={styles.image}
-                />
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {selectedRecipe.Name}
-                </Text>
+          <Pressable onPress={toggleCollapsed}>
+            {({ pressed }) => (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  gap: 8,
+                }}
+              >
+                <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
+                {isCollapsed ? (
+                  <Feather name="minus" size={24} color="black" />
+                ) : (
+                  <Ionicons name="add" size={24} color="black" />
+                )}
               </View>
-            </Link>
-          ))}
+            )}
+          </Pressable>
+          <Collapsible collapsed={isCollapsed} style={styles.section}>
+            {selectedRecipes.map((selectedRecipe) => (
+              <Link
+                href={`/recipe/${selectedRecipe.Recipe_id}`}
+                key={selectedRecipe.Recipe_id}
+              >
+                <View style={styles.listItem}>
+                  <Image
+                    source={{ uri: selectedRecipe.Photos[0] }}
+                    style={styles.image}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {selectedRecipe.Name}
+                  </Text>
+                </View>
+              </Link>
+            ))}
+          </Collapsible>
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}> Recipe Ingredients</Text>
