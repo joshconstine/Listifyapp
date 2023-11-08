@@ -1,9 +1,4 @@
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Pressable, ScrollView, TouchableOpacity } from "react-native";
 
 import { Image } from "react-native";
 import { Text, View } from "../../components/Themed";
@@ -11,11 +6,40 @@ import { SelectedRecipesContext } from "./selectedRecipesContext";
 import { useContext, useEffect, useState } from "react";
 import { IngredientWithQuantityAndType, Recipe } from "../../types/recipe";
 import { Link } from "expo-router";
+import { Swipeable } from "react-native-gesture-handler";
+import { Animated, FlatList, StyleSheet } from "react-native";
 
 interface IIngredientType {
   ingredientType: string;
   ingredients: IngredientWithQuantityAndType[];
 }
+
+const renderRightActions = (
+  progress: any,
+  dragAnimatedValue: any,
+  onRemoveIngredient: any,
+  ingredient: IngredientWithQuantityAndType
+) => {
+  const opacity = dragAnimatedValue.interpolate({
+    inputRange: [-50, 0],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+  });
+  return (
+    <View style={styles.swipedRow}>
+      <View style={styles.swipedConfirmationContainer}>
+        <Text style={styles.deleteConfirmationText}>Are you sure?</Text>
+      </View>
+      <Animated.View style={[styles.deleteButton, { opacity }]}>
+        <TouchableOpacity
+          onPress={() => onRemoveIngredient(ingredient.Ingredient_id)}
+        >
+          <Text style={styles.removeButton}>Remove</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
+  );
+};
 
 export default function ListScreen() {
   const { selectedRecipes, setSelectedRecipes } = useContext(
@@ -121,27 +145,26 @@ export default function ListScreen() {
                 {ingredientType.ingredientType}
               </Text>
               {ingredientType.ingredients.map((ingredient) => (
-                <View
+                <Swipeable
                   key={ingredient.Ingredient_id + ingredient.Name}
-                  style={styles.ingredientItem}
+                  renderRightActions={(a, b) =>
+                    renderRightActions(a, b, onRemoveIngredient, ingredient)
+                  }
                 >
-                  <View style={styles.ingredientListItem}>
-                    <Text style={styles.ingredient}>{ingredient.Name}</Text>
-                    <Text>{`${ingredient.Quantity}: ${
-                      ingredient.Quantity_type
-                    }${
-                      ingredient.Quantity > 1 &&
-                      ingredient.Quantity_type_id !== 1
-                        ? "s"
-                        : ""
-                    }`}</Text>
+                  <View style={styles.row}>
+                    <View style={styles.ingredientListItem}>
+                      <Text>{ingredient.Name}</Text>
+                      <Text>{`${ingredient.Quantity}: ${
+                        ingredient.Quantity_type
+                      }${
+                        ingredient.Quantity > 1 &&
+                        ingredient.Quantity_type_id !== 1
+                          ? "s"
+                          : ""
+                      }`}</Text>
+                    </View>
                   </View>
-                  <TouchableOpacity
-                    onPress={() => onRemoveIngredient(ingredient.Ingredient_id)}
-                  >
-                    <Text style={styles.removeButton}>Remove</Text>
-                  </TouchableOpacity>
-                </View>
+                </Swipeable>
               ))}
             </View>
           ))}
@@ -155,7 +178,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
   },
   title: {
     fontSize: 24,
@@ -205,5 +227,41 @@ const styles = StyleSheet.create({
     width: 100,
     height: 60,
     borderRadius: 10,
+  },
+  row: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center",
+    paddingLeft: 5,
+    backgroundColor: "#efefef",
+    margin: 20,
+    minHeight: 50,
+  },
+  swipedRow: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center",
+    paddingLeft: 5,
+    backgroundColor: "#818181",
+    margin: 20,
+    minHeight: 50,
+  },
+  swipedConfirmationContainer: {
+    flex: 1,
+  },
+  deleteConfirmationText: {
+    color: "#fcfcfc",
+    fontWeight: "bold",
+  },
+  deleteButton: {
+    backgroundColor: "#b60000",
+    flexDirection: "column",
+    justifyContent: "center",
+    height: "100%",
+  },
+  deleteButtonText: {
+    color: "#fcfcfc",
+    fontWeight: "bold",
+    padding: 3,
   },
 });
