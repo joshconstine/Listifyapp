@@ -131,7 +131,7 @@ export default function ListScreen() {
                 }}
               >
                 <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
-                {isCollapsed ? (
+                {!isCollapsed ? (
                   <Feather name="minus" size={24} color="black" />
                 ) : (
                   <Ionicons name="add" size={24} color="black" />

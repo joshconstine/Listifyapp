@@ -65,7 +65,6 @@ function RootLayoutNav() {
           options={{
             headerTransparent: true,
             headerTitle: "",
-            headerTintColor: "blue",
           }}
         />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
