@@ -152,17 +152,15 @@ export default function ListScreen() {
                   }
                 >
                   <View style={styles.row}>
-                    <View style={styles.ingredientListItem}>
-                      <Text>{ingredient.Name}</Text>
-                      <Text>{`${ingredient.Quantity}: ${
-                        ingredient.Quantity_type
-                      }${
-                        ingredient.Quantity > 1 &&
-                        ingredient.Quantity_type_id !== 1
-                          ? "s"
-                          : ""
-                      }`}</Text>
-                    </View>
+                    <Text>{ingredient.Name}</Text>
+                    <Text>{`${ingredient.Quantity}: ${
+                      ingredient.Quantity_type
+                    }${
+                      ingredient.Quantity > 1 &&
+                      ingredient.Quantity_type_id !== 1
+                        ? "s"
+                        : ""
+                    }`}</Text>
                   </View>
                 </Swipeable>
               ))}
@@ -234,16 +232,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingLeft: 5,
     backgroundColor: "#efefef",
-    margin: 20,
+    gap: 10,
+    borderRadius: 10,
+    margin: 10,
     minHeight: 50,
   },
   swipedRow: {
     flexDirection: "row",
     flex: 1,
-    alignItems: "center",
     paddingLeft: 5,
+    borderRadius: 10,
     backgroundColor: "#818181",
-    margin: 20,
+    margin: 10,
     minHeight: 50,
   },
   swipedConfirmationContainer: {
