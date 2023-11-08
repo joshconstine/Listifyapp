@@ -1,13 +1,11 @@
 import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
 
-import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import React, { useContext, useEffect, useState } from "react";
 import { Recipe } from "../../types/recipe";
-import { Link } from "expo-router";
-import { Image } from "react-native";
-import Checkbox from "expo-checkbox";
+
 import { SelectedRecipesContext } from "./selectedRecipesContext";
+import DiscoverCard from "../../components/DiscoverCard";
 export default function TabOneScreen() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,114 +57,17 @@ export default function TabOneScreen() {
   }, []);
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {isLoading ? (
-          <ActivityIndicator size="large" style={styles.loadingIndicator} />
-        ) : (
-          <View style={styles.recipesContainer}>
-            {recipes.length === 0 && (
-              <Text style={styles.noRecipesText}>No recipes found</Text>
-            )}
-            {recipes.map((recipe: Recipe) => {
-              const isChecked = selectedRecipes.some(
-                (selectedRecipe) =>
-                  selectedRecipe.Recipe_id === recipe.Recipe_id
-              );
-              return (
-                <View key={recipe.Recipe_id}>
-                  <Link href={`/recipe/${recipe.Recipe_id}`}>
-                    <View style={styles.recipeItem}>
-                      <Image
-                        source={{ uri: recipe.Photos[0] }}
-                        style={styles.recipeImage}
-                      />
-                      <View
-                        style={{
-                          flex: 1,
-                          alignItems: "flex-end",
-                          gap: 2,
-                        }}
-                      >
-                        <Text style={styles.recipeName}>{recipe.Name}</Text>
-                        <Checkbox
-                          value={isChecked}
-                          onValueChange={() => toggleRecipe(recipe)}
-                          color={isChecked ? "#4630EB" : undefined}
-                        />
-                      </View>
-                    </View>
-                  </Link>
-                </View>
-              );
-            })}
-          </View>
-        )}
-      </ScrollView>
+      <DiscoverCard />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-  },
-
-  loadingIndicator: {
-    marginVertical: 20,
-  },
-  recipesContainer: {
-    marginBottom: 20,
-    width: "100%",
-    flex: 1,
-    gap: 4,
-  },
-  recipeItem: {
-    marginBottom: 20,
-    borderWidth: 1,
-    flexDirection: "row",
-    borderColor: "#ccc",
+    flexDirection: "column",
     padding: 16,
-    width: 360,
-    justifyContent: "space-between",
-    borderRadius: 10,
-  },
-  recipeImage: {
-    width: 180,
-    height: 80,
-    borderRadius: 10,
-  },
-  recipeName: {
-    fontSize: 18,
-    marginTop: 10,
-    fontWeight: "bold",
-  },
-  noRecipesText: {
-    fontSize: 16,
-    color: "gray",
-  },
-  footer: {
-    backgroundColor: "#4630EB",
-    padding: 16,
-  },
-  footerText: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  page: {
-    flex: 1,
-    justifyContent: "center",
+    paddingHorizontal: 32,
+    gap: 16,
     alignItems: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
 });
