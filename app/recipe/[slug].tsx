@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   recipeImage: {
     width: "100%",
-    height: 200,
+    height: 180,
     marginVertical: 8,
     borderRadius: 20,
   },
