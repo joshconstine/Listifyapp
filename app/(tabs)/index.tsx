@@ -59,51 +59,49 @@ export default function TabOneScreen() {
   }, []);
   return (
     <View style={styles.container}>
-      <View style={styles.container}>
-        <ScrollView>
-          {isLoading ? (
-            <ActivityIndicator size="large" style={styles.loadingIndicator} />
-          ) : (
-            <View style={styles.recipesContainer}>
-              {recipes.length === 0 && (
-                <Text style={styles.noRecipesText}>No recipes found</Text>
-              )}
-              {recipes.map((recipe: Recipe) => {
-                const isChecked = selectedRecipes.some(
-                  (selectedRecipe) =>
-                    selectedRecipe.Recipe_id === recipe.Recipe_id
-                );
-                return (
-                  <View key={recipe.Recipe_id}>
-                    <Link href={`/recipe/${recipe.Recipe_id}`}>
-                      <View style={styles.recipeItem}>
-                        <Image
-                          source={{ uri: recipe.Photos[0] }}
-                          style={styles.recipeImage}
+      <ScrollView>
+        {isLoading ? (
+          <ActivityIndicator size="large" style={styles.loadingIndicator} />
+        ) : (
+          <View style={styles.recipesContainer}>
+            {recipes.length === 0 && (
+              <Text style={styles.noRecipesText}>No recipes found</Text>
+            )}
+            {recipes.map((recipe: Recipe) => {
+              const isChecked = selectedRecipes.some(
+                (selectedRecipe) =>
+                  selectedRecipe.Recipe_id === recipe.Recipe_id
+              );
+              return (
+                <View key={recipe.Recipe_id}>
+                  <Link href={`/recipe/${recipe.Recipe_id}`}>
+                    <View style={styles.recipeItem}>
+                      <Image
+                        source={{ uri: recipe.Photos[0] }}
+                        style={styles.recipeImage}
+                      />
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: "flex-end",
+                          gap: 2,
+                        }}
+                      >
+                        <Text style={styles.recipeName}>{recipe.Name}</Text>
+                        <Checkbox
+                          value={isChecked}
+                          onValueChange={() => toggleRecipe(recipe)}
+                          color={isChecked ? "#4630EB" : undefined}
                         />
-                        <View
-                          style={{
-                            flex: 1,
-                            alignItems: "flex-end",
-                            gap: 2,
-                          }}
-                        >
-                          <Text style={styles.recipeName}>{recipe.Name}</Text>
-                          <Checkbox
-                            value={isChecked}
-                            onValueChange={() => toggleRecipe(recipe)}
-                            color={isChecked ? "#4630EB" : undefined}
-                          />
-                        </View>
                       </View>
-                    </Link>
-                  </View>
-                );
-              })}
-            </View>
-          )}
-        </ScrollView>
-      </View>
+                    </View>
+                  </Link>
+                </View>
+              );
+            })}
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 }
