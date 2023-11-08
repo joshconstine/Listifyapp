@@ -6,10 +6,9 @@ import Colors from "../constants/Colors";
 
 type Props = {
   recipe: Recipe;
-  isLoading: boolean;
 };
 
-export default function RecipeInfo({ recipe, isLoading }: Props) {
+export default function RecipeInfo({ recipe }: Props) {
   const recipeInfo = "#1 Recipe This Week";
 
   return (

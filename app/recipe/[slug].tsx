@@ -4,6 +4,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useEffect } from "react";
 import RecipeInfo from "../../components/RecipeInfo";
+import RecipeAuthor from "../../components/RecipeAuthor";
 
 export function Page() {
   const { slug } = useLocalSearchParams();
@@ -36,9 +37,10 @@ export function Page() {
 
   return (
     <View style={styles.container}>
-      <RecipeInfo recipe={recipe} isLoading={isLoading} />
+      <RecipeInfo recipe={recipe} />
       <Text style={styles.recipeName}>{recipe?.Name}</Text>
       <Image source={{ uri: recipe?.Photos[0] }} style={styles.recipeImage} />
+      <RecipeAuthor recipe={recipe} />
       <Text style={styles.description}>{recipe?.Description}</Text>
 
       <Text style={styles.sectionTitle}>Tags:</Text>
@@ -62,16 +64,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     marginTop: 96,
+    gap: 8,
     alignItems: "flex-start",
   },
   recipeName: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
   },
   recipeImage: {
     width: "100%",
     height: 200,
-    marginTop: 16,
+    marginVertical: 20,
     borderRadius: 10,
   },
   description: {
