@@ -152,7 +152,14 @@ export default function ListScreen() {
                   }
                 >
                   <View style={styles.row}>
-                    <Text>{ingredient.Name}</Text>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 16,
+                      }}
+                    >
+                      {ingredient.Name}
+                    </Text>
                     <Text>{`${ingredient.Quantity}: ${
                       ingredient.Quantity_type
                     }${
