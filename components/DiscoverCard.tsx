@@ -1,9 +1,10 @@
 import React from "react";
 import { Recipe } from "../types/recipe";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import { useThemeColor } from "./Themed";
 import Colors from "../constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 type Props = {};
 
@@ -17,10 +18,18 @@ export default function DiscoverCard({}: Props) {
         <Text style={styles.text}>
           Find recipes based on what you already have at home
         </Text>
-        <View style={styles.CTAContainer}>
-          <Text style={styles.CTAText}>Lets try! </Text>
-          <AntDesign name="arrowright" size={18} color={Colors.accent.darker} />
-        </View>
+        <Link href="/(tabs)/search">
+          <View>
+            <View style={styles.CTAContainer}>
+              <Text style={styles.CTAText}>Lets try! </Text>
+              <AntDesign
+                name="arrowright"
+                size={18}
+                color={Colors.accent.darker}
+              />
+            </View>
+          </View>
+        </Link>
       </View>
     </View>
   );
@@ -60,6 +69,6 @@ const styles = StyleSheet.create({
   wordContainer: {
     flexDirection: "column",
     gap: 4,
-    width: 240,
+    width: 200,
   },
 });

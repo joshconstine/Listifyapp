@@ -1,4 +1,4 @@
-import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Image } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import React, { useContext, useEffect, useState } from "react";
@@ -55,19 +55,40 @@ export default function TabOneScreen() {
   useEffect(() => {
     getRecipes();
   }, []);
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
   return (
-    <View style={styles.container}>
-      <DiscoverCard />
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <DiscoverCard />
+        <Image
+          source={{ uri: recipes[0]?.Photos[0] }}
+          style={styles.recipeImage}
+        />
+      </View>
+      <View
+        style={{
+          backgroundColor: "red",
+        }}
+      ></View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "column",
-    padding: 16,
+    flex: 1,
     paddingHorizontal: 32,
     gap: 16,
-    alignItems: "center",
+  },
+  recipeImage: {
+    width: "100%",
+    height: 500,
+    borderRadius: 10,
   },
 });

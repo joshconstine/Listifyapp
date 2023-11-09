@@ -41,7 +41,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Recipes",
+            title: "Discover",
             tabBarIcon: ({ color }) => (
               <AntDesign name="find" size={24} color={color} />
             ),
@@ -64,7 +64,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="search"
           options={{
-            title: "",
+            title: "Search Recipes",
             tabBarIcon: ({ color }) => (
               <Feather name="search" size={24} color={color} />
             ),
@@ -73,7 +73,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="createRecipe"
           options={{
-            title: "",
+            title: "Create Recipe",
             tabBarIcon: ({ color }) => (
               <Ionicons name="add-circle-outline" size={24} color={color} />
             ),
@@ -82,7 +82,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="list"
           options={{
-            title: "",
+            title: "Generated List",
             tabBarIcon: ({ color }) => (
               <Entypo name="shopping-basket" size={24} color={color} />
             ),
