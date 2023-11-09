@@ -71,11 +71,6 @@ export default function TabOneScreen() {
           style={styles.recipeImage}
         />
       </View>
-      <View
-        style={{
-          backgroundColor: "red",
-        }}
-      ></View>
     </ScrollView>
   );
 }
