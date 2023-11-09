@@ -10,7 +10,7 @@ import {
   SelectList,
 } from "react-native-dropdown-select-list";
 
-type SelectData = {
+export type SelectData = {
   key: string;
   value: string;
   disabled?: boolean;
