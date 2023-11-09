@@ -3,20 +3,15 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import {
-  MultipleSelectList,
-  SelectList,
-} from "react-native-dropdown-select-list";
+import { MultipleSelectList } from "react-native-dropdown-select-list";
 import { SelectData } from "../(tabs)/createRecipe";
 
 export function Page() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [matchingRecipes, setMatchingRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [uniqueIngredients, setUniqueIngredients] = useState<Ingredient[]>([]);
-  const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>(
-    []
-  );
+  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+
   const getIngredients = async () => {
     try {
       const response = await fetch(
@@ -31,6 +26,7 @@ export function Page() {
       const data = (await response.json()) as Record<string, Ingredient[]>;
       const uniqueIngredients = Object.values(data).flat();
       setUniqueIngredients(uniqueIngredients);
+      // console.log(data);
       setIsLoading(false);
     } catch (error) {
       console.error("Error  recipes. Status:", error);
@@ -50,7 +46,6 @@ export function Page() {
       ); // Replace with your Docker container's IP or hostname if needed
       const data = await response.json();
       setRecipes(data);
-      setMatchingRecipes(data);
       setIsLoading(false);
     } catch (error) {
       console.error("Error  recipes. Status:", error);
@@ -66,19 +61,11 @@ export function Page() {
     key: String(ingredient.Ingredient_id),
     value: ingredient.Name,
   }));
-
-  useEffect(() => {
-    const newMatchingRecipes = recipes.filter((recipe) =>
-      recipe.Ingredients?.some((ingredient) =>
-        selectedIngredients.some(
-          (selectedIngredient) =>
-            selectedIngredient.Ingredient_id === ingredient.Ingredient_id
-        )
-      )
-    );
-    setMatchingRecipes(newMatchingRecipes);
-  }, [selectedIngredients]);
-
+  const filteredRecipes = recipes.filter((recipe) =>
+    recipe.Ingredients?.some((ingredient) =>
+      selectedIngredients.includes(ingredient.Name)
+    )
+  );
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -86,44 +73,33 @@ export function Page() {
         <Text style={styles.subTitle}>We will find matching recipes</Text>
         <MultipleSelectList
           placeholder="Select Ingredients"
-          setSelected={(val: string) => {
-            const ingredient = uniqueIngredients.find(
-              (ingredient) => ingredient.Name === val
-            );
-            if (ingredient) {
-              setSelectedIngredients((p) => [...p, ingredient]);
-            }
+          setSelected={(val: any) => setSelectedIngredients(val)}
+          inputStyles={{
+            width: "100%",
           }}
           data={data}
           save="value"
         />
         <View style={styles.recipesContainer}>
-          {matchingRecipes?.map((recipe) => {
-            const matchedIngredients = recipe.Ingredients?.filter(
-              (ingredient) =>
-                selectedIngredients.some(
-                  (selectedIngredient) =>
-                    selectedIngredient.Ingredient_id ===
-                    ingredient.Ingredient_id
-                )
-            );
-            const image = recipe.Photos
-              ? recipe.Photos[0]
-              : "../../assets/images/placeholder.png";
-            return (
-              <View key={recipe.Recipe_id} style={styles.recipe}>
-                <Text>{recipe.Name}</Text>
-                <Image source={{ uri: image }} style={styles.recipeImage} />
-                <View>
-                  {matchedIngredients?.map((ingredient) => (
-                    <Text key={ingredient.Ingredient_id}>
-                      {ingredient.Name} - {ingredient.Quantity}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-            );
-          })}
+          {filteredRecipes.map((recipe) => (
+            <View key={recipe.Recipe_id} style={styles.recipe}>
+              <Text style={styles.title}>{recipe.Name}</Text>
+              <Text style={styles.subTitle}>Ingredients:</Text>
+              {recipe.Ingredients?.map((ingredient) => {
+                const isSelected = selectedIngredients.includes(
+                  ingredient.Name
+                );
+                return (
+                  <Text
+                    key={ingredient.Ingredient_id}
+                    style={isSelected ? styles.selectedTag : styles.tag}
+                  >
+                    {ingredient.Name}
+                  </Text>
+                );
+              })}
+            </View>
+          ))}
         </View>
       </View>
     </ScrollView>
@@ -166,6 +142,13 @@ const styles = StyleSheet.create({
 
   tag: {
     fontSize: 16,
+  },
+  selectedTag: {
+    fontSize: 16,
+    backgroundColor: "green",
+    color: "white",
+    padding: 8,
+    borderRadius: 8,
   },
 });
 
