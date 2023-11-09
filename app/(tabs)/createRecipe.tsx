@@ -1,17 +1,26 @@
 import { Pressable, ScrollView, TouchableOpacity } from "react-native";
 
 import { Text, View } from "../../components/Themed";
-
 import { Animated, FlatList, StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { Ingredient } from "../../types/recipe";
+import {
+  MultipleSelectList,
+  SelectList,
+} from "react-native-dropdown-select-list";
+
+type SelectData = {
+  key: string;
+  value: string;
+  disabled?: boolean;
+}[];
 
 export default function CreateRecipeScreen() {
   const [formVals, setFormVals] = useState<{
     name: string;
     description: string;
-    ingredients: any[];
+    ingredients: Ingredient[];
   }>({
     name: "",
     description: "",
@@ -20,6 +29,7 @@ export default function CreateRecipeScreen() {
   const [ingredients, setIngredients] = useState<Record<string, Ingredient[]>>(
     {}
   );
+  const [uniqueIngredients, setUniqueIngredients] = useState<Ingredient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const getIngredients = async () => {
@@ -33,8 +43,10 @@ export default function CreateRecipeScreen() {
           },
         }
       ); // Replace with your Docker container's IP or hostname if needed
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, Ingredient[]>;
       setIngredients(data);
+      const uniqueIngredients = Object.values(data).flat();
+      setUniqueIngredients(uniqueIngredients);
       setIsLoading(false);
     } catch (error) {
       console.error("Error  recipes. Status:", error);
@@ -45,6 +57,11 @@ export default function CreateRecipeScreen() {
   useEffect(() => {
     getIngredients();
   }, []);
+  const data: SelectData = uniqueIngredients.map((ingredient) => ({
+    key: String(ingredient.Ingredient_id),
+    value: ingredient.Name,
+  }));
+
   return (
     <View style={styles.container}>
       <Text>Create Recipe here</Text>
@@ -77,7 +94,22 @@ export default function CreateRecipeScreen() {
         onChangeText={(text) => setFormVals({ ...formVals, description: text })}
         value={formVals.description}
       />
-      {Object.keys(ingredients).map((key) => (
+      <MultipleSelectList
+        setSelected={(val: string) => {
+          const ingredient = uniqueIngredients.find(
+            (ingredient) => ingredient.Name === val
+          );
+          if (ingredient) {
+            setFormVals({
+              ...formVals,
+              ingredients: [...formVals.ingredients, ingredient],
+            });
+          }
+        }}
+        data={data}
+        save="value"
+      />
+      {/* {Object.keys(ingredients).map((key) => (
         <View key={key}>
           <Text>{key}</Text>
           {ingredients[key].map((ingredient) => (
@@ -94,7 +126,7 @@ export default function CreateRecipeScreen() {
             </TouchableOpacity>
           ))}
         </View>
-      ))}
+      ))} */}
     </View>
   );
 }
