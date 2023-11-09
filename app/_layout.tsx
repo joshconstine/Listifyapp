@@ -67,6 +67,13 @@ function RootLayoutNav() {
             headerTitle: "",
           }}
         />
+        <Stack.Screen
+          name="find/index"
+          options={{
+            headerTransparent: true,
+            headerTitle: "",
+          }}
+        />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>

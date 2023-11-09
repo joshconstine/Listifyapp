@@ -6,6 +6,7 @@ import { Recipe } from "../../types/recipe";
 
 import { SelectedRecipesContext } from "./selectedRecipesContext";
 import DiscoverCard from "../../components/DiscoverCard";
+import { AntDesign } from "@expo/vector-icons";
 export default function TabOneScreen() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,6 +52,8 @@ export default function TabOneScreen() {
       setIsLoading(false);
     }
   };
+  const selectedImage =
+    "https://foodly-bucket.s3.us-west-1.amazonaws.com/listify/potato.jpeg";
 
   useEffect(() => {
     getRecipes();
@@ -62,14 +65,19 @@ export default function TabOneScreen() {
       </View>
     );
   }
+  const overlayText = recipes.length + " Recipes";
   return (
     <ScrollView>
       <View style={styles.container}>
         <DiscoverCard />
-        <Image
-          source={{ uri: recipes[0]?.Photos[0] }}
-          style={styles.recipeImage}
-        />
+        <View>
+          <Image source={{ uri: selectedImage }} style={styles.recipeImage} />
+          <Text style={styles.overlay}>Potato Based Recipes</Text>
+          <Text style={styles.overlayhelper}>{overlayText}</Text>
+          <View style={styles.favoriteContainer}>
+            <AntDesign name="eyeo" size={24} color="white" />
+          </View>
+        </View>
       </View>
     </ScrollView>
   );
@@ -84,6 +92,35 @@ const styles = StyleSheet.create({
   recipeImage: {
     width: "100%",
     height: 500,
+    borderRadius: 10,
+  },
+  overlay: {
+    position: "absolute",
+    top: 400,
+    left: 16,
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "white",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
+  },
+  overlayhelper: {
+    position: "absolute",
+    top: 450,
+    left: 16,
+    fontSize: 20,
+    color: "white",
+  },
+  favoriteContainer: {
+    position: "absolute",
+    top: 20,
+    right: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: "black",
+    padding: 8,
     borderRadius: 10,
   },
 });

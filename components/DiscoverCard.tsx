@@ -18,7 +18,7 @@ export default function DiscoverCard({}: Props) {
         <Text style={styles.text}>
           Find recipes based on what you already have at home
         </Text>
-        <Link href="/(tabs)/search">
+        <Link href="/find">
           <View>
             <View style={styles.CTAContainer}>
               <Text style={styles.CTAText}>Lets try! </Text>
