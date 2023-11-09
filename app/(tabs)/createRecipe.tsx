@@ -4,7 +4,7 @@ import { Text, View } from "../../components/Themed";
 import { Animated, FlatList, StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
-import { Ingredient } from "../../types/recipe";
+import { Ingredient, Tag } from "../../types/recipe";
 import {
   MultipleSelectList,
   SelectList,
@@ -21,14 +21,18 @@ export default function CreateRecipeScreen() {
     name: string;
     description: string;
     ingredients: Ingredient[];
+    tags: Tag[];
   }>({
     name: "",
     description: "",
     ingredients: [],
+    tags: [],
   });
   const [ingredients, setIngredients] = useState<Record<string, Ingredient[]>>(
     {}
   );
+  const [tags, setTags] = useState<Tag[]>([]);
+
   const [uniqueIngredients, setUniqueIngredients] = useState<Ingredient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -53,13 +57,36 @@ export default function CreateRecipeScreen() {
       setIsLoading(false);
     }
   };
-
+  const getTags = async () => {
+    try {
+      const response = await fetch(
+        "http://172.21.0.3:8080/api/mobile/v1/tags",
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      ); // Replace with your Docker container's IP or hostname if needed
+      const data = await response.json();
+      setTags(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error  tags. Status:", error);
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
     getIngredients();
+    getTags();
   }, []);
   const data: SelectData = uniqueIngredients.map((ingredient) => ({
     key: String(ingredient.Ingredient_id),
     value: ingredient.Name,
+  }));
+  const tagsData: SelectData = tags.map((tag) => ({
+    key: String(tag.Tag_id),
+    value: tag.Name,
   }));
 
   return (
@@ -95,6 +122,7 @@ export default function CreateRecipeScreen() {
         value={formVals.description}
       />
       <MultipleSelectList
+        placeholder="Select Ingredients"
         setSelected={(val: string) => {
           const ingredient = uniqueIngredients.find(
             (ingredient) => ingredient.Name === val
@@ -107,6 +135,21 @@ export default function CreateRecipeScreen() {
           }
         }}
         data={data}
+        save="value"
+      />
+      <MultipleSelectList
+        placeholder="Select Tags"
+        search={false}
+        setSelected={(val: string) => {
+          const tag = tags.find((tag) => tag.Name === val);
+          if (tag) {
+            setFormVals({
+              ...formVals,
+              tags: [...formVals.tags, tag],
+            });
+          }
+        }}
+        data={tagsData}
         save="value"
       />
       {/* {Object.keys(ingredients).map((key) => (
