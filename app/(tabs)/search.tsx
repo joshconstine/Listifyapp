@@ -102,10 +102,17 @@ export default function TabOneScreen() {
                 <View key={recipe.Recipe_id}>
                   <Link href={`/recipe/${recipe.Recipe_id}`}>
                     <View style={styles.recipeItem}>
-                      <Image
-                        source={{ uri: recipe.Photos[0] }}
-                        style={styles.recipeImage}
-                      />
+                      {recipe.Photos && recipe.Photos.length > 0 ? (
+                        <Image
+                          source={{ uri: recipe.Photos[0] }}
+                          style={styles.recipeImage}
+                        />
+                      ) : (
+                        <Image
+                          source={require("../../assets/images/placeholder.png")}
+                          style={styles.recipeImage}
+                        />
+                      )}
                       <View
                         style={{
                           flex: 1,

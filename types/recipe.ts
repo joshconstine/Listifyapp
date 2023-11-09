@@ -2,7 +2,7 @@ export type Recipe = {
   Recipe_id: number;
   Name: string;
   Description: string;
-  Photos: string[];
+  Photos: string[] | null;
   Tags: Tag[];
   TagString: string;
   Ingredients: IngredientWithQuantityAndType[];

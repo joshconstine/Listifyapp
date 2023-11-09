@@ -5,7 +5,7 @@ import { useThemeColor } from "./Themed";
 import Colors from "../constants/Colors";
 
 type Props = {
-  recipe: Recipe;
+  recipe: Recipe | null;
 };
 
 export default function RecipeInfo({ recipe }: Props) {

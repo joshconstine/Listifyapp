@@ -37,21 +37,19 @@ export function Page() {
     getRecipe();
   }, []);
 
+  const selectedImage =
+    recipe?.Photos && recipe?.Photos[0]
+      ? recipe?.Photos[0]
+      : "../../assets/images/placeholder.png";
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <RecipeInfo recipe={recipe} />
         <Text style={styles.recipeName}>{recipe?.Name}</Text>
-        <Image source={{ uri: recipe?.Photos[0] }} style={styles.recipeImage} />
+        <Image source={{ uri: selectedImage }} style={styles.recipeImage} />
         <RecipeAuthor recipe={recipe} />
         <Text style={styles.description}>{recipe?.Description}</Text>
-
-        {/* <Text style={styles.sectionTitle}>Tags:</Text> */}
-        {/* {recipe?.Tags?.map((tag) => (
-        <Text key={tag.Tag_id} style={styles.tag}>
-          {tag.Name}
-        </Text>
-      ))} */}
         <IngredientsContainer recipe={recipe} />
       </View>
     </ScrollView>

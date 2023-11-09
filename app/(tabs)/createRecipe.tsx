@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, TouchableOpacity } from "react-native";
+import { Button, Pressable, ScrollView, TouchableOpacity } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import { Animated, FlatList, StyleSheet } from "react-native";
@@ -88,6 +88,30 @@ export default function CreateRecipeScreen() {
     key: String(tag.Tag_id),
     value: tag.Name,
   }));
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(
+        "http://172.21.0.3:8080/api/mobile/v1/recipes",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Name: formVals.name,
+            Description: formVals.description,
+            Ingredients: formVals.ingredients,
+            Tags: formVals.tags,
+          }),
+        }
+      ); // Replace with your Docker container's IP or hostname if needed`
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error  recipes. Status:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -152,24 +176,7 @@ export default function CreateRecipeScreen() {
         data={tagsData}
         save="value"
       />
-      {/* {Object.keys(ingredients).map((key) => (
-        <View key={key}>
-          <Text>{key}</Text>
-          {ingredients[key].map((ingredient) => (
-            <TouchableOpacity
-              key={ingredient.Ingredient_id}
-              onPress={() => {
-                setFormVals({
-                  ...formVals,
-                  ingredients: [...formVals.ingredients, ingredient],
-                });
-              }}
-            >
-              <Text>{ingredient.Name}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      ))} */}
+      <Button title="Create Recipe" onPress={handleSubmit} />
     </View>
   );
 }
