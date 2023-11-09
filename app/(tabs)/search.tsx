@@ -8,9 +8,21 @@ import { Link } from "expo-router";
 import { Image } from "react-native";
 import Checkbox from "expo-checkbox";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
+import { TextInput } from "react-native-gesture-handler";
 export default function TabOneScreen() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [filterdRecipes, setFilterdRecipes] = useState<Recipe[]>([]);
+
+  useEffect(() => {
+    setFilterdRecipes(
+      recipes.filter((recipe) =>
+        recipe.Name.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, recipes]);
+
   const { selectedRecipes, setSelectedRecipes } = useContext(
     SelectedRecipesContext
   );
@@ -59,6 +71,20 @@ export default function TabOneScreen() {
   }, []);
   return (
     <View style={styles.container}>
+      <TextInput
+        style={{
+          height: 40,
+          borderColor: "gray",
+          borderWidth: 1,
+          width: 300,
+          borderRadius: 10,
+          padding: 10,
+          margin: 10,
+        }}
+        onChangeText={(text) => setSearch(text)}
+        value={search}
+        placeholder="Search for recipes"
+      />
       <ScrollView>
         {isLoading ? (
           <ActivityIndicator size="large" style={styles.loadingIndicator} />
@@ -67,7 +93,7 @@ export default function TabOneScreen() {
             {recipes.length === 0 && (
               <Text style={styles.noRecipesText}>No recipes found</Text>
             )}
-            {recipes.map((recipe: Recipe) => {
+            {filterdRecipes.map((recipe: Recipe) => {
               const isChecked = selectedRecipes.some(
                 (selectedRecipe) =>
                   selectedRecipe.Recipe_id === recipe.Recipe_id
