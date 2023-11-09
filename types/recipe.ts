@@ -22,3 +22,8 @@ export type IngredientWithQuantityAndType = {
   Quantity_type: string;
   Quantity_type_id: number;
 };
+export type Ingredient = {
+  Ingredient_id: number;
+  Ingredient_Type_id: number;
+  Name: string;
+};
