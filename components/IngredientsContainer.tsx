@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Recipe } from "../types/recipe";
-import { View, Text, Image, StyleSheet, Pressable, Button } from "react-native";
-import { useThemeColor } from "./Themed";
+import { View, Text, StyleSheet } from "react-native";
 import Colors from "../constants/Colors";
 import RecipeSelector from "./RecipeSelector";
+import { SelectedRecipesContext } from "../app/(tabs)/selectedRecipesContext";
 
 type Props = {
   recipe: Recipe;
 };
 
 export default function IngredientsContainer({ recipe }: Props) {
-  const [servings, setServings] = useState(1);
+  const { selectedRecipes } = useContext(SelectedRecipesContext);
+  const servings =
+    selectedRecipes.find(
+      (selectedRecipe) => selectedRecipe.recipe.Recipe_id === recipe.Recipe_id
+    )?.servings || 1;
 
   return (
     <>
