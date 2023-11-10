@@ -118,11 +118,13 @@ export default function TabOneScreen() {
                         }}
                       >
                         <Text style={styles.recipeName}>{recipe.Name}</Text>
-                        <Checkbox
-                          value={isChecked}
-                          onValueChange={() => toggleRecipe(recipe)}
-                          color={isChecked ? "#4630EB" : undefined}
-                        />
+                        {!isChecked && (
+                          <Checkbox
+                            value={isChecked}
+                            onValueChange={() => toggleRecipe(recipe)}
+                            color={isChecked ? "#4630EB" : undefined}
+                          />
+                        )}
                         {isChecked && (
                           <View style={styles.servingsContainer}>
                             <Text style={styles.servingText}>
@@ -142,7 +144,14 @@ export default function TabOneScreen() {
                                         selectedRecipe.recipe.Recipe_id ===
                                         recipe.Recipe_id
                                     );
-                                    newSelectedRecipes[index].servings -= 1;
+                                    if (
+                                      newSelectedRecipes[index].servings === 1
+                                    ) {
+                                      () => toggleRecipe(recipe);
+                                      newSelectedRecipes.splice(index, 1);
+                                    } else {
+                                      newSelectedRecipes[index].servings -= 1;
+                                    }
                                     return newSelectedRecipes;
                                   });
                                 }}
