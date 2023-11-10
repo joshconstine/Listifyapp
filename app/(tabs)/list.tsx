@@ -107,49 +107,6 @@ export default function ListScreen() {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.section}>
-          <Pressable onPress={toggleCollapsed}>
-            {({ pressed }) => (
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  gap: 8,
-                }}
-              >
-                <Text style={styles.sectionTitle}>Your Selected Recipes</Text>
-                {!isCollapsed ? (
-                  <Feather name="minus" size={24} color="black" />
-                ) : (
-                  <Ionicons name="add" size={24} color="black" />
-                )}
-              </View>
-            )}
-          </Pressable>
-          <Collapsible collapsed={isCollapsed} style={styles.section}>
-            {selectedRecipes.map((selectedRecipe) => (
-              <Link
-                href={`/recipe/${selectedRecipe.recipe.Recipe_id}`}
-                key={selectedRecipe.recipe.Recipe_id}
-              >
-                <View style={styles.listItem}>
-                  <Image
-                    source={{ uri: selectedRecipe.recipe.Photos[0] }}
-                    style={styles.image}
-                  />
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {selectedRecipe.recipe.Name}
-                  </Text>
-                </View>
-              </Link>
-            ))}
-          </Collapsible>
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}> Recipe Ingredients</Text>
           {listIngredients.map((ingredientType) => (
             <View key={ingredientType.ingredientType}>
               <Text style={styles.sectionTitle}>
@@ -168,14 +125,17 @@ export default function ListScreen() {
                     <Text
                       style={{
                         fontWeight: "bold",
-                        fontSize: 16,
+                        fontSize: 18,
                       }}
                     >
                       {ingredient.Name}
                     </Text>
-                    <Text>{`${ingredient.Quantity}: ${
-                      ingredient.Quantity_type
-                    }${
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: "#818181",
+                      }}
+                    >{`${ingredient.Quantity}: ${ingredient.Quantity_type}${
                       ingredient.Quantity > 1 &&
                       ingredient.Quantity_type_id !== 1
                         ? "s"
@@ -229,7 +189,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold",
     marginBottom: 10,
   },
   ingredientItem: {
@@ -266,8 +225,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
-    paddingRight: 10,
-    paddingLeft: 5,
+    paddingHorizontal: 10,
     backgroundColor: "#efefef",
     gap: 10,
     borderRadius: 10,
