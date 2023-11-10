@@ -4,7 +4,11 @@ import { Image } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
 import { useContext, useEffect, useState } from "react";
-import { IngredientWithQuantityAndType, Recipe } from "../../types/recipe";
+import {
+  IngredientWithQuantityAndType,
+  Recipe,
+  SelectedRecipe,
+} from "../../types/recipe";
 import { Link } from "expo-router";
 import { Swipeable } from "react-native-gesture-handler";
 import { Animated, FlatList, StyleSheet } from "react-native";
@@ -52,8 +56,8 @@ export default function ListScreen() {
 
   const setIngredients = () => {
     const allIngredients = selectedRecipes.reduce(
-      (p: IngredientWithQuantityAndType[], recipe: Recipe) => {
-        return [...p, ...recipe.Ingredients];
+      (p: IngredientWithQuantityAndType[], selectedRecipe: SelectedRecipe) => {
+        return [...p, ...selectedRecipe.recipe.Ingredients];
       },
       []
     );
@@ -103,11 +107,11 @@ export default function ListScreen() {
   }, [selectedRecipes]);
 
   const onRemoveIngredient = (ingredientId: number) => {
-    const newSelectedRecipes = selectedRecipes.map((recipe) => {
-      const newIngredients = recipe.Ingredients.filter(
+    const newSelectedRecipes = selectedRecipes.map((selected) => {
+      const newIngredients = selected.recipe.Ingredients.filter(
         (ingredient) => ingredient.Ingredient_id !== ingredientId
       );
-      return { ...recipe, Ingredients: newIngredients };
+      return { ...selected, Ingredients: newIngredients };
     });
     setSelectedRecipes(newSelectedRecipes);
   };
@@ -142,12 +146,12 @@ export default function ListScreen() {
           <Collapsible collapsed={isCollapsed} style={styles.section}>
             {selectedRecipes.map((selectedRecipe) => (
               <Link
-                href={`/recipe/${selectedRecipe.Recipe_id}`}
-                key={selectedRecipe.Recipe_id}
+                href={`/recipe/${selectedRecipe.recipe.Recipe_id}`}
+                key={selectedRecipe.recipe.Recipe_id}
               >
                 <View style={styles.listItem}>
                   <Image
-                    source={{ uri: selectedRecipe.Photos[0] }}
+                    source={{ uri: selectedRecipe.recipe.Photos[0] }}
                     style={styles.image}
                   />
                   <Text
@@ -155,7 +159,7 @@ export default function ListScreen() {
                       fontWeight: "bold",
                     }}
                   >
-                    {selectedRecipe.Name}
+                    {selectedRecipe.recipe.Name}
                   </Text>
                 </View>
               </Link>
