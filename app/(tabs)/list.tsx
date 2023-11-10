@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, TouchableOpacity } from "react-native";
+import { Button, Pressable, ScrollView, TouchableOpacity } from "react-native";
 
 import { Image } from "react-native";
 import { Text, View } from "../../components/Themed";
@@ -13,8 +13,9 @@ import { Link } from "expo-router";
 import { Swipeable } from "react-native-gesture-handler";
 import { Animated, FlatList, StyleSheet } from "react-native";
 import Collapsible from "react-native-collapsible";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import Colors from "../../constants/Colors";
 
 interface IIngredientType {
   ingredientType: string;
@@ -174,13 +175,15 @@ export default function ListScreen() {
                 {ingredientType.ingredientType}
               </Text>
               {ingredientType.ingredients.map((ingredient) => (
-                <Swipeable
-                  key={ingredient.Ingredient_id + ingredient.Name}
-                  renderRightActions={(a, b) =>
-                    renderRightActions(a, b, onRemoveIngredient, ingredient)
-                  }
-                >
-                  <View style={styles.row}>
+                <View style={styles.row} key={ingredient.Ingredient_id}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: "transparent",
+                      gap: 10,
+                    }}
+                  >
                     <Text
                       style={{
                         fontWeight: "bold",
@@ -198,7 +201,14 @@ export default function ListScreen() {
                         : ""
                     }`}</Text>
                   </View>
-                </Swipeable>
+                  <Pressable
+                    onPress={() => onRemoveIngredient(ingredient.Ingredient_id)}
+                  >
+                    <View style={styles.removeWrapper}>
+                      <FontAwesome name="remove" size={16} color="white" />
+                    </View>
+                  </Pressable>
+                </View>
               ))}
             </View>
           ))}
@@ -217,6 +227,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+  },
+  removeWrapper: {
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: Colors.accent.darker,
   },
   separator: {
     height: 1,
@@ -266,6 +284,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1,
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingRight: 10,
     paddingLeft: 5,
     backgroundColor: "#efefef",
     gap: 10,
