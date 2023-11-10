@@ -6,8 +6,10 @@ import {
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
+import { SelectedRecipesContext } from "./(tabs)/selectedRecipesContext";
+import { SelectedRecipe } from "../types/recipe";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -49,33 +51,38 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  const [selectedRecipes, setSelectedRecipes] = useState<SelectedRecipe[]>([]);
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            headerTransparent: true,
-            headerTintColor: "blue",
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="recipe/[slug]"
-          options={{
-            headerTransparent: true,
-            headerTitle: "",
-          }}
-        />
-        <Stack.Screen
-          name="find/index"
-          options={{
-            headerTransparent: true,
-            headerTitle: "",
-          }}
-        />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
-    </ThemeProvider>
+    <SelectedRecipesContext.Provider
+      value={{ selectedRecipes, setSelectedRecipes }}
+    >
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen
+            name="(tabs)"
+            options={{
+              headerTransparent: true,
+              headerTintColor: "blue",
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="recipe/[slug]"
+            options={{
+              headerTransparent: true,
+              headerTitle: "",
+            }}
+          />
+          <Stack.Screen
+            name="find/index"
+            options={{
+              headerTransparent: true,
+              headerTitle: "",
+            }}
+          />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </ThemeProvider>
+    </SelectedRecipesContext.Provider>
   );
 }
