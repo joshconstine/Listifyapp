@@ -19,5 +19,7 @@ export default {
   accent: {
     normal: "#fff4ee",
     darker: "#ff8535",
+    blue: "#50a9b0",
+    darkBlue: "#3c959c",
   },
 };

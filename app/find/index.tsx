@@ -5,6 +5,38 @@ import { useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
 import { SelectData } from "../(tabs)/createRecipe";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "../../constants/Colors";
+import { AntDesign } from "@expo/vector-icons";
+
+export const PlusButton = () => {
+  return (
+    <View
+      style={{
+        backgroundColor: Colors.accent.blue,
+        borderRadius: 5,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Ionicons name="add" size={24} color="white" />
+    </View>
+  );
+};
+export const MinusButton = () => {
+  return (
+    <View
+      style={{
+        backgroundColor: Colors.accent.darker,
+        borderRadius: 5,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <AntDesign name="minus" size={24} color="white" />
+    </View>
+  );
+};
 
 export function Page() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -72,9 +104,18 @@ export function Page() {
         <Text style={styles.title}>What's in your kitchen?</Text>
         <Text style={styles.subTitle}>We will find matching recipes</Text>
         <MultipleSelectList
-          placeholder="Select Ingredients"
+          placeholder="Select your Ingredients..."
+          searchPlaceholder="Select your Ingredients..."
+          searchicon={<></>}
           setSelected={(val: any) => setSelectedIngredients(val)}
           inputStyles={{
+            width: "100%",
+            borderWidth: 0,
+            color: "grey",
+          }}
+          arrowicon={<PlusButton />}
+          closeicon={<MinusButton />}
+          boxStyles={{
             width: "100%",
           }}
           data={data}

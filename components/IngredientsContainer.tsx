@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "white",
-    backgroundColor: "#3c959c",
+    backgroundColor: Colors.accent.darkBlue,
     height: 16,
   },
   servingsButtonContainer: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 16,
-    backgroundColor: "#50a9b0",
+    backgroundColor: Colors.accent.blue,
     borderRadius: 5,
     padding: 4,
     color: "white",
