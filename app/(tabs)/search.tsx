@@ -5,7 +5,6 @@ import {
   StyleSheet,
 } from "react-native";
 
-import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import React, { useContext, useEffect, useState } from "react";
 import { Recipe } from "../../types/recipe";
@@ -37,17 +36,18 @@ export default function TabOneScreen() {
     let newSelectedRecipes = [];
     if (
       selectedRecipes.some(
-        (selectedRecipe) => selectedRecipe.Recipe_id === recipe.Recipe_id
+        (selectedRecipe) => selectedRecipe.recipe.Recipe_id === recipe.Recipe_id
       )
     ) {
       newSelectedRecipes = [
         ...selectedRecipes.filter(
-          (selectedRecipe) => selectedRecipe.Recipe_id !== recipe.Recipe_id
+          (selectedRecipe) =>
+            selectedRecipe.recipe.Recipe_id !== recipe.Recipe_id
         ),
       ];
       setSelectedRecipes(newSelectedRecipes);
     } else {
-      newSelectedRecipes = [...selectedRecipes, recipe];
+      newSelectedRecipes = [...selectedRecipes, { recipe, servings: 1 }];
       setSelectedRecipes(newSelectedRecipes);
     }
   };
@@ -100,11 +100,12 @@ export default function TabOneScreen() {
               <Text style={styles.noRecipesText}>No recipes found</Text>
             )}
             {filterdRecipes.map((recipe: Recipe) => {
-              const isChecked = selectedRecipes.some(
+              const selectedRecipe = selectedRecipes.find(
                 (selectedRecipe) =>
-                  selectedRecipe.Recipe_id === recipe.Recipe_id
+                  selectedRecipe.recipe.Recipe_id === recipe.Recipe_id
               );
-              let servings = 1;
+              const isChecked = !!selectedRecipe;
+              const servings = selectedRecipe?.servings ?? 0;
               return (
                 <View key={recipe.Recipe_id}>
                   <Link href={`/recipe/${recipe.Recipe_id}`}>
@@ -133,12 +134,34 @@ export default function TabOneScreen() {
                                 title="-"
                                 disabled={servings === 0}
                                 color={"#3c959c"}
-                                onPress={(s) => {}}
+                                onPress={(s) => {
+                                  setSelectedRecipes((p) => {
+                                    const newSelectedRecipes = [...p];
+                                    const index = newSelectedRecipes.findIndex(
+                                      (selectedRecipe) =>
+                                        selectedRecipe.recipe.Recipe_id ===
+                                        recipe.Recipe_id
+                                    );
+                                    newSelectedRecipes[index].servings -= 1;
+                                    return newSelectedRecipes;
+                                  });
+                                }}
                               />
                               <Button
                                 title="+"
                                 color={"#3c959c"}
-                                onPress={(s) => {}}
+                                onPress={(s) => {
+                                  setSelectedRecipes((p) => {
+                                    const newSelectedRecipes = [...p];
+                                    const index = newSelectedRecipes.findIndex(
+                                      (selectedRecipe) =>
+                                        selectedRecipe.recipe.Recipe_id ===
+                                        recipe.Recipe_id
+                                    );
+                                    newSelectedRecipes[index].servings += 1;
+                                    return newSelectedRecipes;
+                                  });
+                                }}
                               />
                             </View>
                           </View>

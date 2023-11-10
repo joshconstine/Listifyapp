@@ -27,3 +27,8 @@ export type Ingredient = {
   Ingredient_Type_id: number;
   Name: string;
 };
+
+export type SelectedRecipe = {
+  recipe: Recipe;
+  servings: number;
+};

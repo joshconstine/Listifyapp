@@ -1,13 +1,12 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
-import { Pressable, View, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import { AntDesign, Entypo, Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
-import Colors from "../../constants/Colors";
 import { useContext, useState } from "react";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
-import { Recipe } from "../../types/recipe";
+import { SelectedRecipe } from "../../types/recipe";
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
@@ -17,10 +16,9 @@ function TabBarIcon(props: {
 }) {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
-
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
+  const [selectedRecipes, setSelectedRecipes] = useState<SelectedRecipe[]>([]);
 
   return (
     <SelectedRecipesContext.Provider

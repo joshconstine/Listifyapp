@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState } from "react";
-import { Recipe } from "../../types/recipe";
+import { Recipe, SelectedRecipe } from "../../types/recipe";
 
 interface SelectedRecipesContextInterface {
-  selectedRecipes: Recipe[];
-  setSelectedRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
+  selectedRecipes: SelectedRecipe[];
+  setSelectedRecipes: React.Dispatch<React.SetStateAction<SelectedRecipe[]>>;
 }
 
 const initialValue: SelectedRecipesContextInterface = {
