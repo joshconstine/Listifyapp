@@ -31,11 +31,14 @@ export default function ListScreen() {
   const setIngredients = () => {
     const allIngredients = selectedRecipes.reduce(
       (p: IngredientWithQuantityAndType[], selectedRecipe: SelectedRecipe) => {
-        return [...p, ...selectedRecipe.recipe.Ingredients];
+        if (selectedRecipe.recipe.Ingredients) {
+          return [...p, ...selectedRecipe.recipe.Ingredients];
+        }
+        return p;
       },
       []
     );
-    const uniqueIngredients = allIngredients.reduce(
+    const uniqueIngredients = allIngredients?.reduce(
       (
         p: IngredientWithQuantityAndType[],
         ingredient: IngredientWithQuantityAndType
@@ -83,7 +86,7 @@ export default function ListScreen() {
   const onRemoveIngredient = (ingredientId: number) => {
     setSelectedRecipes((p) => {
       const updatedSelectedRecipes = p.map((selectedRecipe) => {
-        const updatedIngredients = selectedRecipe.recipe.Ingredients.filter(
+        const updatedIngredients = selectedRecipe.recipe.Ingredients?.filter(
           (ingredient) => ingredient.Ingredient_id !== ingredientId
         );
         return {
@@ -107,13 +110,16 @@ export default function ListScreen() {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.section}>
-          {listIngredients.map((ingredientType) => (
-            <View key={ingredientType.ingredientType}>
+          {listIngredients.map((ingredientType, i) => (
+            <View key={ingredientType.ingredientType + i}>
               <Text style={styles.sectionTitle}>
                 {ingredientType.ingredientType}
               </Text>
-              {ingredientType.ingredients.map((ingredient) => (
-                <View style={styles.row} key={ingredient.Ingredient_id}>
+              {ingredientType.ingredients.map((ingredient, j) => (
+                <View
+                  style={styles.row}
+                  key={ingredient.Ingredient_id + String(ingredient.Name)}
+                >
                   <View
                     style={{
                       flexDirection: "row",
