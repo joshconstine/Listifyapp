@@ -22,33 +22,6 @@ interface IIngredientType {
   ingredients: IngredientWithQuantityAndType[];
 }
 
-const renderRightActions = (
-  progress: any,
-  dragAnimatedValue: any,
-  onRemoveIngredient: any,
-  ingredient: IngredientWithQuantityAndType
-) => {
-  const opacity = dragAnimatedValue.interpolate({
-    inputRange: [-50, 0],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-  });
-  return (
-    <View style={styles.swipedRow}>
-      <View style={styles.swipedConfirmationContainer}>
-        <Text style={styles.deleteConfirmationText}>Are you sure?</Text>
-      </View>
-      <Animated.View style={[styles.deleteButton, { opacity }]}>
-        <TouchableOpacity
-          onPress={() => onRemoveIngredient(ingredient.Ingredient_id)}
-        >
-          <Text style={styles.removeButton}>Remove</Text>
-        </TouchableOpacity>
-      </Animated.View>
-    </View>
-  );
-};
-
 export default function ListScreen() {
   const { selectedRecipes, setSelectedRecipes } = useContext(
     SelectedRecipesContext
@@ -108,13 +81,21 @@ export default function ListScreen() {
   }, [selectedRecipes]);
 
   const onRemoveIngredient = (ingredientId: number) => {
-    const newSelectedRecipes = selectedRecipes.map((selected) => {
-      const newIngredients = selected.recipe.Ingredients.filter(
-        (ingredient) => ingredient.Ingredient_id !== ingredientId
-      );
-      return { ...selected, Ingredients: newIngredients };
+    setSelectedRecipes((p) => {
+      const updatedSelectedRecipes = p.map((selectedRecipe) => {
+        const updatedIngredients = selectedRecipe.recipe.Ingredients.filter(
+          (ingredient) => ingredient.Ingredient_id !== ingredientId
+        );
+        return {
+          ...selectedRecipe,
+          recipe: {
+            ...selectedRecipe.recipe,
+            Ingredients: updatedIngredients,
+          },
+        };
+      });
+      return updatedSelectedRecipes;
     });
-    setSelectedRecipes(newSelectedRecipes);
   };
   const [isCollapsed, setIsCollapsed] = useState(true);
   const toggleCollapsed = () => {
