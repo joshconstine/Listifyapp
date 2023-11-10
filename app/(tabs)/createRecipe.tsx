@@ -1,4 +1,10 @@
-import { Button, Pressable, ScrollView, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  Button,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import { Animated, FlatList, StyleSheet } from "react-native";
@@ -9,6 +15,7 @@ import {
   MultipleSelectList,
   SelectList,
 } from "react-native-dropdown-select-list";
+import { router, useRouter } from "expo-router";
 
 export type SelectData = {
   key: string;
@@ -20,22 +27,20 @@ export default function CreateRecipeScreen() {
   const [formVals, setFormVals] = useState<{
     name: string;
     description: string;
-    ingredients: Ingredient[];
-    tags: Tag[];
   }>({
     name: "",
     description: "",
-    ingredients: [],
-    tags: [],
   });
   const [ingredients, setIngredients] = useState<Record<string, Ingredient[]>>(
     {}
   );
+  const router = useRouter();
   const [tags, setTags] = useState<Tag[]>([]);
 
   const [uniqueIngredients, setUniqueIngredients] = useState<Ingredient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const getIngredients = async () => {
     try {
       const response = await fetch(
@@ -89,6 +94,17 @@ export default function CreateRecipeScreen() {
     value: tag.Name,
   }));
   const handleSubmit = async () => {
+    const recipeIngredients = selectedIngredients.map((ingredient) => {
+      return uniqueIngredients.find((uniqueIngredient) => {
+        return uniqueIngredient.Name === ingredient;
+      });
+    });
+    const recipeTags = selectedTags.map((tag) => {
+      return tags.find((uniqueTag) => {
+        return uniqueTag.Name === tag;
+      });
+    });
+
     try {
       const response = await fetch(
         "http://172.21.0.3:8080/api/mobile/v1/recipes",
@@ -101,13 +117,22 @@ export default function CreateRecipeScreen() {
           body: JSON.stringify({
             Name: formVals.name,
             Description: formVals.description,
-            Ingredients: formVals.ingredients,
-            Tags: formVals.tags,
+            Ingredients: recipeIngredients,
+            Tags: recipeTags,
           }),
         }
       ); // Replace with your Docker container's IP or hostname if needed`
-      const data = await response.json();
-      console.log(data);
+      const createdRecipeId = await response.json();
+      const route = "/recipe/" + createdRecipeId;
+
+      setSelectedIngredients([]);
+      setSelectedTags([]);
+      setFormVals({
+        name: "",
+        description: "",
+      });
+
+      router.push(route as any);
     } catch (error) {
       console.error("Error  recipes. Status:", error);
     }
@@ -147,16 +172,8 @@ export default function CreateRecipeScreen() {
       />
       <MultipleSelectList
         placeholder="Select Ingredients"
-        setSelected={(val: string) => {
-          const ingredient = uniqueIngredients.find(
-            (ingredient) => ingredient.Name === val
-          );
-          if (ingredient) {
-            setFormVals({
-              ...formVals,
-              ingredients: [...formVals.ingredients, ingredient],
-            });
-          }
+        setSelected={(val: any) => {
+          setSelectedIngredients(val);
         }}
         data={data}
         save="value"
@@ -164,14 +181,8 @@ export default function CreateRecipeScreen() {
       <MultipleSelectList
         placeholder="Select Tags"
         search={false}
-        setSelected={(val: string) => {
-          const tag = tags.find((tag) => tag.Name === val);
-          if (tag) {
-            setFormVals({
-              ...formVals,
-              tags: [...formVals.tags, tag],
-            });
-          }
+        setSelected={(val: any) => {
+          setSelectedTags(val);
         }}
         data={tagsData}
         save="value"
