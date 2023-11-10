@@ -3,9 +3,10 @@ import { Recipe } from "../types/recipe";
 import { View, Text, Image, StyleSheet, Pressable, Button } from "react-native";
 import { useThemeColor } from "./Themed";
 import Colors from "../constants/Colors";
+import RecipeSelector from "./RecipeSelector";
 
 type Props = {
-  recipe: Recipe | null;
+  recipe: Recipe;
 };
 
 export default function IngredientsContainer({ recipe }: Props) {
@@ -15,25 +16,7 @@ export default function IngredientsContainer({ recipe }: Props) {
     <>
       <View style={styles.titleContainer}>
         <Text style={styles.sectionTitle}>Ingredients</Text>
-        <View style={styles.servingsContainer}>
-          <Text style={styles.servingText}>
-            {" "}
-            {`${servings} serving${servings > 1 ? "s" : ""}`}
-          </Text>
-          <View style={styles.servingsButtonContainer}>
-            <Button
-              title="-"
-              disabled={servings === 0}
-              color={"#3c959c"}
-              onPress={(s) => setServings((s) => s - 1)}
-            />
-            <Button
-              title="+"
-              color={"#3c959c"}
-              onPress={(s) => setServings((s) => s + 1)}
-            />
-          </View>
-        </View>
+        <RecipeSelector recipe={recipe} />
       </View>
       {recipe?.Ingredients?.map((ingredient) => (
         <View style={styles.ingredientContainer} key={ingredient.Ingredient_id}>

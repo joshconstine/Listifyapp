@@ -1,21 +1,18 @@
 import { useLocalSearchParams } from "expo-router";
 import { Recipe } from "../../types/recipe";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import RecipeInfo from "../../components/RecipeInfo";
 import RecipeAuthor from "../../components/RecipeAuthor";
 import { ScrollView } from "react-native-gesture-handler";
 import IngredientsContainer from "../../components/IngredientsContainer";
-import { SelectedRecipesContext } from "../(tabs)/selectedRecipesContext";
 
 export function Page() {
   const { slug } = useLocalSearchParams();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { selectedRecipes, setSelectedRecipes } = useContext(
-    SelectedRecipesContext
-  );
+
   const getRecipe = async () => {
     try {
       const response = await fetch(
@@ -44,6 +41,10 @@ export function Page() {
     recipe?.Photos && recipe?.Photos[0]
       ? recipe?.Photos[0]
       : "../../assets/images/placeholder.png";
+
+  if (!recipe) {
+    return <Text>Recipe not found</Text>;
+  }
 
   return (
     <ScrollView>
