@@ -16,6 +16,7 @@ import {
   SelectList,
 } from "react-native-dropdown-select-list";
 import { router, useRouter } from "expo-router";
+import Colors from "../../constants/Colors";
 
 export type SelectData = {
   key: string;
@@ -139,56 +140,63 @@ export default function CreateRecipeScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text>Create Recipe here</Text>
-      <TextInput
-        placeholder="Recipe Name"
-        style={{
-          height: 40,
-          borderColor: "gray",
-          borderWidth: 1,
-          width: 300,
-          borderRadius: 10,
-          padding: 10,
-          margin: 10,
-        }}
-        onChangeText={(text) => setFormVals({ ...formVals, name: text })}
-        value={formVals.name}
-      />
-      <TextInput
-        multiline={true}
-        numberOfLines={6}
-        placeholder="Recipe Description"
-        style={{
-          borderColor: "gray",
-          borderWidth: 1,
-          width: 300,
-          borderRadius: 10,
-          padding: 10,
-          margin: 10,
-        }}
-        onChangeText={(text) => setFormVals({ ...formVals, description: text })}
-        value={formVals.description}
-      />
-      <MultipleSelectList
-        placeholder="Select Ingredients"
-        setSelected={(val: any) => {
-          setSelectedIngredients(val);
-        }}
-        data={data}
-        save="value"
-      />
-      <MultipleSelectList
-        placeholder="Select Tags"
-        search={false}
-        setSelected={(val: any) => {
-          setSelectedTags(val);
-        }}
-        data={tagsData}
-        save="value"
-      />
-      <Button title="Create Recipe" onPress={handleSubmit} />
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text>Create Recipe here</Text>
+        <TextInput
+          placeholder="Recipe Name"
+          style={{
+            height: 40,
+            borderColor: "gray",
+            borderWidth: 1,
+            borderRadius: 10,
+            padding: 10,
+          }}
+          onChangeText={(text) => setFormVals({ ...formVals, name: text })}
+          value={formVals.name}
+        />
+        <MultipleSelectList
+          placeholder="Select Tags"
+          search={false}
+          setSelected={(val: any) => {
+            setSelectedTags(val);
+          }}
+          badgeStyles={{
+            backgroundColor: Colors.accent.darker,
+          }}
+          data={tagsData}
+          save="value"
+        />
+        <TextInput
+          multiline={true}
+          numberOfLines={6}
+          placeholder="Recipe Description"
+          style={{
+            borderColor: "gray",
+            borderWidth: 1,
+            borderRadius: 10,
+            padding: 10,
+          }}
+          onChangeText={(text) =>
+            setFormVals({ ...formVals, description: text })
+          }
+          value={formVals.description}
+        />
+        <MultipleSelectList
+          placeholder="Select Ingredients"
+          setSelected={(val: any) => {
+            setSelectedIngredients(val);
+          }}
+          data={data}
+          save="value"
+        />
+        <Button
+          title="Create Recipe"
+          onPress={handleSubmit}
+          color={Colors.accent.darkBlue}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
@@ -196,6 +204,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    gap: 16,
   },
   separator: {
     height: 1,
