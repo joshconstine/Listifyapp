@@ -5,39 +5,10 @@ import { useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
 import { SelectData } from "../(tabs)/createRecipe";
-import { Ionicons } from "@expo/vector-icons";
-import Colors from "../../constants/Colors";
-import { AntDesign } from "@expo/vector-icons";
-import { Link } from "expo-router";
 
-export const PlusButton = () => {
-  return (
-    <View
-      style={{
-        backgroundColor: Colors.accent.blue,
-        borderRadius: 5,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Ionicons name="add" size={24} color="white" />
-    </View>
-  );
-};
-export const MinusButton = () => {
-  return (
-    <View
-      style={{
-        backgroundColor: Colors.accent.darker,
-        borderRadius: 5,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <AntDesign name="minus" size={24} color="white" />
-    </View>
-  );
-};
+import { Link } from "expo-router";
+import PlusButton from "../../components/PlusButton";
+import { MinusButton } from "../../components/MinusButton";
 
 export function Page() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

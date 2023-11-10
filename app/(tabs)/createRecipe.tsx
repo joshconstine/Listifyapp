@@ -17,6 +17,8 @@ import {
 } from "react-native-dropdown-select-list";
 import { router, useRouter } from "expo-router";
 import Colors from "../../constants/Colors";
+import PlusButton from "../../components/PlusButton";
+import { MinusButton } from "../../components/MinusButton";
 
 export type SelectData = {
   key: string;
@@ -164,6 +166,8 @@ export default function CreateRecipeScreen() {
           badgeStyles={{
             backgroundColor: Colors.accent.darker,
           }}
+          arrowicon={<PlusButton />}
+          closeicon={<MinusButton />}
           data={tagsData}
           save="value"
         />
@@ -187,6 +191,8 @@ export default function CreateRecipeScreen() {
           setSelected={(val: any) => {
             setSelectedIngredients(val);
           }}
+          closeicon={<MinusButton />}
+          arrowicon={<PlusButton />}
           data={data}
           save="value"
         />
