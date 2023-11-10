@@ -27,7 +27,17 @@ export default function ListScreen() {
     const allIngredients = selectedRecipes.reduce(
       (p: IngredientWithQuantityAndType[], selectedRecipe: SelectedRecipe) => {
         if (selectedRecipe.recipe.Ingredients) {
-          return [...p, ...selectedRecipe.recipe.Ingredients];
+          const ingredientsWithCalculatedQuantity =
+            selectedRecipe.recipe.Ingredients.map((ingredient) => {
+              const servings = selectedRecipe.servings;
+              const quantity = ingredient.Quantity * servings;
+              return {
+                ...ingredient,
+                Quantity: quantity,
+              };
+            });
+
+          return [...p, ...ingredientsWithCalculatedQuantity];
         }
         return p;
       },
