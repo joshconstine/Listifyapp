@@ -38,11 +38,14 @@ function RecipeSelector({ recipe }: Props) {
   return (
     <View>
       {!isChecked && (
-        <Checkbox
-          value={isChecked}
-          onValueChange={() => toggleRecipe(recipe)}
-          color={isChecked ? "#4630EB" : undefined}
-        />
+        <View style={styles.checkboxContainer}>
+          <Text style={styles.checkboxLabel}>add to list</Text>
+          <Checkbox
+            value={isChecked}
+            onValueChange={() => toggleRecipe(recipe)}
+            color={isChecked ? "#4630EB" : undefined}
+          />
+        </View>
       )}
       {isChecked && (
         <View style={styles.servingsContainer}>
@@ -120,5 +123,15 @@ const styles = StyleSheet.create({
   servingsButtonContainer: {
     flexDirection: "row",
     gap: 4,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+
+    gap: 8,
+  },
+  checkboxLabel: {
+    fontSize: 12,
+    color: Colors.accent.darkBlue,
   },
 });

@@ -114,7 +114,8 @@ export function Page() {
               <View
                 style={{
                   flexDirection: "column",
-                  gap: 4,
+                  gap: 8,
+                  alignItems: "flex-end",
                 }}
               >
                 <Link href={`/recipe/${recipe.Recipe_id}`}>
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     borderRadius: 10,
-    backgroundColor: "darkgrey",
+    backgroundColor: "lightgrey",
     width: "100%",
   },
   title: {
