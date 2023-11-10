@@ -10,6 +10,7 @@ import {
 import { StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
+import RecipeCard from "../../components/RecipeCard";
 
 interface IIngredientType {
   ingredientType: string;
@@ -149,6 +150,15 @@ export default function ListScreen() {
             </View>
           ))}
         </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Recipes in List</Text>
+          {selectedRecipes.map((selectedRecipe) => (
+            <RecipeCard
+              recipe={selectedRecipe.recipe}
+              key={selectedRecipe.recipe.Recipe_id}
+            />
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -159,7 +169,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-
   removeWrapper: {
     width: 30,
     height: 30,
@@ -178,18 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
   },
-  ingredientItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
-  },
 
-  image: {
-    width: 100,
-    height: 60,
-    borderRadius: 10,
-  },
   row: {
     flexDirection: "row",
     flex: 1,

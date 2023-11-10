@@ -1,15 +1,14 @@
 import { Ingredient, Recipe } from "../../types/recipe";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
 import { SelectData } from "../(tabs)/createRecipe";
 
-import { Link } from "expo-router";
 import PlusButton from "../../components/PlusButton";
 import { MinusButton } from "../../components/MinusButton";
-import RecipeSelector from "../../components/RecipeSelector";
+import RecipeCard from "../../components/RecipeCard";
 
 export function Page() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -97,33 +96,7 @@ export function Page() {
         />
         <View style={styles.recipesContainer}>
           {filteredRecipes.map((recipe) => (
-            <View key={recipe.Recipe_id} style={styles.recipe}>
-              <View>
-                {recipe.Photos && recipe.Photos.length > 0 ? (
-                  <Image
-                    source={{ uri: recipe.Photos[0] }}
-                    style={styles.recipeImage}
-                  />
-                ) : (
-                  <Image
-                    source={require("../../assets/images/placeholder.png")}
-                    style={styles.recipeImage}
-                  />
-                )}
-              </View>
-              <View
-                style={{
-                  flexDirection: "column",
-                  gap: 8,
-                  alignItems: "flex-end",
-                }}
-              >
-                <Link href={`/recipe/${recipe.Recipe_id}`}>
-                  <Text style={styles.recipeName}>{recipe.Name}</Text>
-                </Link>
-                <RecipeSelector recipe={recipe} />
-              </View>
-            </View>
+            <RecipeCard recipe={recipe} key={recipe.Recipe_id} />
           ))}
         </View>
       </View>
@@ -146,34 +119,17 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 4,
   },
-  recipe: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    borderRadius: 10,
-    backgroundColor: "lightgrey",
-    width: "100%",
-  },
+
   title: {
     fontSize: 30,
     fontWeight: "bold",
   },
-  recipeImage: {
-    width: 160,
-    height: 80,
-    borderRadius: 10,
-  },
+
   subTitle: {
     fontSize: 16,
     color: "grey",
   },
-  recipeName: {
-    fontSize: 16,
-    width: 100,
-    fontWeight: "bold",
-  },
+
   ingredients: {
     fontSize: 12,
     color: "grey",
