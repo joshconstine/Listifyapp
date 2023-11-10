@@ -8,6 +8,7 @@ import { SelectData } from "../(tabs)/createRecipe";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 export const PlusButton = () => {
   return (
@@ -107,6 +108,7 @@ export function Page() {
           placeholder="Select your Ingredients..."
           searchPlaceholder="Select your Ingredients..."
           searchicon={<></>}
+          notFoundText="No Ingredients found"
           setSelected={(val: any) => setSelectedIngredients(val)}
           inputStyles={{
             width: "100%",
@@ -124,21 +126,22 @@ export function Page() {
         <View style={styles.recipesContainer}>
           {filteredRecipes.map((recipe) => (
             <View key={recipe.Recipe_id} style={styles.recipe}>
-              <Text style={styles.title}>{recipe.Name}</Text>
-              <Text style={styles.subTitle}>Ingredients:</Text>
-              {recipe.Ingredients?.map((ingredient) => {
-                const isSelected = selectedIngredients.includes(
-                  ingredient.Name
-                );
-                return (
-                  <Text
-                    key={ingredient.Ingredient_id}
-                    style={isSelected ? styles.selectedTag : styles.tag}
-                  >
-                    {ingredient.Name}
-                  </Text>
-                );
-              })}
+              <View>
+                {recipe.Photos && recipe.Photos.length > 0 ? (
+                  <Image
+                    source={{ uri: recipe.Photos[0] }}
+                    style={styles.recipeImage}
+                  />
+                ) : (
+                  <Image
+                    source={require("../../assets/images/placeholder.png")}
+                    style={styles.recipeImage}
+                  />
+                )}
+              </View>
+              <Link href={`/recipe/${recipe.Recipe_id}`}>
+                <Text style={styles.recipeName}>{recipe.Name}</Text>
+              </Link>
             </View>
           ))}
         </View>
@@ -150,7 +153,7 @@ export function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 8,
     paddingHorizontal: 32,
     marginTop: 72,
     gap: 16,
@@ -159,37 +162,40 @@ const styles = StyleSheet.create({
   recipesContainer: {
     flex: 1,
     alignItems: "flex-start",
-    gap: 16,
+    width: "100%",
+    gap: 4,
   },
   recipe: {
     flex: 1,
-    alignItems: "flex-start",
-    gap: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    borderRadius: 10,
+    backgroundColor: "darkgrey",
+    width: "100%",
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
   },
   recipeImage: {
-    width: "100%",
-    height: 180,
-    marginVertical: 8,
-    borderRadius: 20,
+    width: 160,
+    height: 80,
+    borderRadius: 10,
   },
   subTitle: {
     fontSize: 16,
     color: "grey",
   },
-
-  tag: {
+  recipeName: {
     fontSize: 16,
+    width: 100,
+    fontWeight: "bold",
   },
-  selectedTag: {
-    fontSize: 16,
-    backgroundColor: "green",
-    color: "white",
-    padding: 8,
-    borderRadius: 8,
+  ingredients: {
+    fontSize: 12,
+    color: "grey",
   },
 });
 
