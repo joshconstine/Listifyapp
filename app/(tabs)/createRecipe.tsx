@@ -159,7 +159,7 @@ export default function CreateRecipeScreen() {
         />
         <MultipleSelectList
           placeholder="Select Tags"
-          search={false}
+          searchPlaceholder="Select Tags"
           setSelected={(val: any) => {
             setSelectedTags(val);
           }}
@@ -188,6 +188,7 @@ export default function CreateRecipeScreen() {
         />
         <MultipleSelectList
           placeholder="Select Ingredients"
+          searchPlaceholder="Select Ingredients"
           setSelected={(val: any) => {
             setSelectedIngredients(val);
           }}
