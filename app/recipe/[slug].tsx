@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     gap: 16,
     alignItems: "flex-start",
   },
-
   recipeName: {
     fontSize: 30,
     fontWeight: "bold",
@@ -81,10 +80,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   description: {
-    fontSize: 16,
-  },
-
-  tag: {
     fontSize: 16,
   },
 });

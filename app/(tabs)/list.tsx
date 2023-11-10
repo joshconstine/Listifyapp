@@ -1,20 +1,14 @@
-import { Button, Pressable, ScrollView, TouchableOpacity } from "react-native";
+import { Pressable, ScrollView } from "react-native";
 
-import { Image } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
 import { useContext, useEffect, useState } from "react";
 import {
   IngredientWithQuantityAndType,
-  Recipe,
   SelectedRecipe,
 } from "../../types/recipe";
-import { Link } from "expo-router";
-import { Swipeable } from "react-native-gesture-handler";
-import { Animated, FlatList, StyleSheet } from "react-native";
-import Collapsible from "react-native-collapsible";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
 
 interface IIngredientType {
@@ -100,12 +94,7 @@ export default function ListScreen() {
       return updatedSelectedRecipes;
     });
   };
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const toggleCollapsed = () => {
-    setIsCollapsed((p) => {
-      return !p;
-    });
-  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -170,11 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
+
   removeWrapper: {
     width: 30,
     height: 30,
@@ -183,11 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: Colors.accent.darker,
   },
-  separator: {
-    height: 1,
-    width: "100%",
-    marginBottom: 20,
-  },
+
   section: {
     marginBottom: 20,
     flex: 1,
@@ -203,24 +184,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  listItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 10,
-  },
-  removeButton: {
-    color: "red",
-  },
-  ingredient: {
-    fontWeight: "bold",
-  },
-  ingredientListItem: {
-    flexDirection: "row",
-    gap: 10,
-    alignItems: "center",
-    marginBottom: 10,
-  },
+
   image: {
     width: 100,
     height: 60,
@@ -237,32 +201,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 10,
     minHeight: 50,
-  },
-  swipedRow: {
-    flexDirection: "row",
-    flex: 1,
-    paddingLeft: 5,
-    borderRadius: 10,
-    backgroundColor: "#818181",
-    margin: 10,
-    minHeight: 50,
-  },
-  swipedConfirmationContainer: {
-    flex: 1,
-  },
-  deleteConfirmationText: {
-    color: "#fcfcfc",
-    fontWeight: "bold",
-  },
-  deleteButton: {
-    backgroundColor: "#b60000",
-    flexDirection: "column",
-    justifyContent: "center",
-    height: "100%",
-  },
-  deleteButtonText: {
-    color: "#fcfcfc",
-    fontWeight: "bold",
-    padding: 3,
   },
 });

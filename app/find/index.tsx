@@ -9,6 +9,7 @@ import { SelectData } from "../(tabs)/createRecipe";
 import { Link } from "expo-router";
 import PlusButton from "../../components/PlusButton";
 import { MinusButton } from "../../components/MinusButton";
+import RecipeSelector from "../../components/RecipeSelector";
 
 export function Page() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -110,9 +111,17 @@ export function Page() {
                   />
                 )}
               </View>
-              <Link href={`/recipe/${recipe.Recipe_id}`}>
-                <Text style={styles.recipeName}>{recipe.Name}</Text>
-              </Link>
+              <View
+                style={{
+                  flexDirection: "column",
+                  gap: 4,
+                }}
+              >
+                <Link href={`/recipe/${recipe.Recipe_id}`}>
+                  <Text style={styles.recipeName}>{recipe.Name}</Text>
+                </Link>
+                <RecipeSelector recipe={recipe} />
+              </View>
             </View>
           ))}
         </View>
