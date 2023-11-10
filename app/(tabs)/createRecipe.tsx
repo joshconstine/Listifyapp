@@ -144,11 +144,9 @@ export default function CreateRecipeScreen() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text>Create Recipe here</Text>
         <TextInput
           placeholder="Recipe Name"
           style={{
-            height: 40,
             borderColor: "gray",
             borderWidth: 1,
             borderRadius: 10,
@@ -173,7 +171,7 @@ export default function CreateRecipeScreen() {
         />
         <TextInput
           multiline={true}
-          numberOfLines={6}
+          numberOfLines={4}
           placeholder="Recipe Description"
           style={{
             borderColor: "gray",
@@ -212,10 +210,5 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     gap: 16,
-  },
-  separator: {
-    height: 1,
-    width: "100%",
-    marginBottom: 20,
   },
 });
