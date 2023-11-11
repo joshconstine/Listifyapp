@@ -5,9 +5,10 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 import { Text, View } from "../../components/Themed";
-import { Animated, FlatList, StyleSheet } from "react-native";
+import { Animated, FlatList, StyleSheet, Image } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { Ingredient, Tag } from "../../types/recipe";
@@ -44,6 +45,7 @@ export default function CreateRecipeScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [image, setImage] = useState(null);
   const getIngredients = async () => {
     try {
       const response = await fetch(
@@ -84,6 +86,22 @@ export default function CreateRecipeScreen() {
       setIsLoading(false);
     }
   };
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   useEffect(() => {
     getIngredients();
     getTags();
@@ -195,6 +213,17 @@ export default function CreateRecipeScreen() {
           data={data}
           save="value"
         />
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Button title="Pick an image from camera roll" onPress={pickImage} />
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 200, height: 200 }}
+            />
+          )}
+        </View>
         <Button
           title="Create Recipe"
           onPress={handleSubmit}
