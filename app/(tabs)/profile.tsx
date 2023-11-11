@@ -1,11 +1,12 @@
 import React from "react";
 import {
+  Button,
   Pressable,
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { SignedIn, SignedOut } from "@clerk/clerk-expo";
+import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
 
 import { Text, View } from "../../components/Themed";
 
@@ -15,6 +16,22 @@ import SignInScreen from "../../components/SignInScreen";
 import { Sign } from "crypto";
 
 export default function ProfileScreen() {
+  const SignOut = () => {
+    const { isLoaded, signOut } = useAuth();
+    if (!isLoaded) {
+      return null;
+    }
+    return (
+      <View>
+        <Button
+          title="Sign Out"
+          onPress={() => {
+            signOut();
+          }}
+        />
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <View
@@ -26,6 +43,7 @@ export default function ProfileScreen() {
       <SafeAreaView style={styles.container}>
         <SignedIn>
           <Text>You are Signed in</Text>
+          <SignOut />
         </SignedIn>
         <SignedOut>
           <SignUpScreen />
