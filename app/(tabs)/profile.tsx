@@ -10,6 +10,9 @@ import { SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { Text, View } from "../../components/Themed";
 
 import { Animated, FlatList, StyleSheet } from "react-native";
+import SignUpScreen from "../../components/SignUpScreen";
+import SignInScreen from "../../components/SignInScreen";
+import { Sign } from "crypto";
 
 export default function ProfileScreen() {
   return (
@@ -25,7 +28,8 @@ export default function ProfileScreen() {
           <Text>You are Signed in</Text>
         </SignedIn>
         <SignedOut>
-          <Text>You are Signed out</Text>
+          <SignUpScreen />
+          <SignInScreen />
         </SignedOut>
       </SafeAreaView>
     </View>
@@ -35,7 +39,9 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   separator: {
     height: 1,
