@@ -1,4 +1,11 @@
-import { Pressable, ScrollView, TouchableOpacity } from "react-native";
+import React from "react";
+import {
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { SignedIn, SignedOut } from "@clerk/clerk-expo";
 
 import { Text, View } from "../../components/Themed";
 
@@ -13,6 +20,14 @@ export default function ProfileScreen() {
         darkColor="rgba(255, 255, 255, 0.1)"
       />
       <Text>Profile here</Text>
+      <SafeAreaView style={styles.container}>
+        <SignedIn>
+          <Text>You are Signed in</Text>
+        </SignedIn>
+        <SignedOut>
+          <Text>You are Signed out</Text>
+        </SignedOut>
+      </SafeAreaView>
     </View>
   );
 }
