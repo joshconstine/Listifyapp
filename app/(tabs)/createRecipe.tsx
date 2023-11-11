@@ -45,7 +45,59 @@ export default function CreateRecipeScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
+    let body = new FormData();
+    // @ts-ignore
+    body.append("photo", {
+      uri: image,
+      name: "image.jpeg",
+      type: "image/jpeg",
+    });
+    body.append("Content-Type", "image/jpeg");
+    const recipeIngredients = selectedIngredients.map((ingredient) => {
+      return uniqueIngredients.find((uniqueIngredient) => {
+        return uniqueIngredient.Name === ingredient;
+      });
+    });
+    const recipeTags = selectedTags.map((tag) => {
+      return tags.find((uniqueTag) => {
+        return uniqueTag.Name === tag;
+      });
+    });
+
+    body.append("Name", formVals.name);
+    body.append("Description", formVals.description);
+    body.append("Ingredients", JSON.stringify(recipeIngredients));
+    body.append("Tags", JSON.stringify(recipeTags));
+    try {
+      const response = await fetch(
+        "http://172.21.0.3:8080/api/mobile/v1/recipes",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+          body: body,
+        }
+      ); // Replace with your Docker container's IP or hostname if needed`
+      const createdRecipeId = await response.json();
+      const route = "/recipe/" + createdRecipeId;
+
+      setSelectedIngredients([]);
+      setSelectedTags([]);
+      setFormVals({
+        name: "",
+        description: "",
+      });
+
+      router.push(route as any);
+    } catch (error) {
+      console.error("Error  recipes. Status:", error);
+    }
+  };
   const getIngredients = async () => {
     try {
       const response = await fetch(
@@ -114,50 +166,6 @@ export default function CreateRecipeScreen() {
     key: String(tag.Tag_id),
     value: tag.Name,
   }));
-  const handleSubmit = async () => {
-    const recipeIngredients = selectedIngredients.map((ingredient) => {
-      return uniqueIngredients.find((uniqueIngredient) => {
-        return uniqueIngredient.Name === ingredient;
-      });
-    });
-    const recipeTags = selectedTags.map((tag) => {
-      return tags.find((uniqueTag) => {
-        return uniqueTag.Name === tag;
-      });
-    });
-
-    try {
-      const response = await fetch(
-        "http://172.21.0.3:8080/api/mobile/v1/recipes",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            Name: formVals.name,
-            Description: formVals.description,
-            Ingredients: recipeIngredients,
-            Tags: recipeTags,
-          }),
-        }
-      ); // Replace with your Docker container's IP or hostname if needed`
-      const createdRecipeId = await response.json();
-      const route = "/recipe/" + createdRecipeId;
-
-      setSelectedIngredients([]);
-      setSelectedTags([]);
-      setFormVals({
-        name: "",
-        description: "",
-      });
-
-      router.push(route as any);
-    } catch (error) {
-      console.error("Error  recipes. Status:", error);
-    }
-  };
 
   return (
     <ScrollView>
