@@ -1,8 +1,14 @@
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 
-export default function SignInScreen() {
+export default function SignInCard() {
   const { signIn, setActive, isLoaded } = useSignIn();
 
   const [emailAddress, setEmailAddress] = React.useState("");
@@ -26,7 +32,7 @@ export default function SignInScreen() {
     }
   };
   return (
-    <View>
+    <View style={styles.card}>
       <View>
         <TextInput
           autoCapitalize="none"
@@ -51,3 +57,13 @@ export default function SignInScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: "#fff",
+    alignItems: "center",
+    height: "90%",
+    padding: 40,
+    borderRadius: 40,
+  },
+});

@@ -12,9 +12,9 @@ import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
 import { Text, View } from "../../components/Themed";
 
 import { Animated, FlatList, StyleSheet } from "react-native";
-import SignUpScreen from "../../components/SignUpScreen";
-import SignInScreen from "../../components/SignInScreen";
 import { Sign } from "crypto";
+import SignInCard from "../../components/SignInCard";
+import SignUpCard from "../../components/SignUpCard";
 
 export type User = {
   clerkId: string;
@@ -70,23 +70,17 @@ export default function ProfileScreen() {
   };
   return (
     <View style={styles.container}>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255, 255, 255, 0.1)"
-      />
-      <Text>Profile</Text>
-      <Text>{userId}</Text>
-      <Text>{user?.username}</Text>
-
       <SafeAreaView style={styles.container}>
         <SignedIn>
+          <Text>Profile</Text>
+          <Text>{userId}</Text>
+          <Text>{user?.username}</Text>
           <Text>You are Signed in</Text>
           <SignOut />
         </SignedIn>
         <SignedOut>
-          <SignUpScreen />
-          <SignInScreen />
+          {/* <SignUpCard /> */}
+          <SignInCard />
         </SignedOut>
       </SafeAreaView>
     </View>
@@ -96,7 +90,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#d1e0e0",
     alignItems: "center",
     justifyContent: "center",
   },
