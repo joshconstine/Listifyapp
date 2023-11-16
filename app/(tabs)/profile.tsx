@@ -21,26 +21,37 @@ export type User = {
   username: string | null;
   photoUrl: string | null;
 };
+type UserDataJSON = {
+  Clerk_id: string;
+  Photo_url: string | null;
+  Username: string | null;
+};
 
 export default function ProfileScreen() {
   const { isLoaded, signOut, userId } = useAuth();
-  // const [user, setUser] = React.useState(null);
-  // const fetchUser = async () => {
-  //   const response = await fetch(
-  //     "http://172.21.0.3:8080/api/mobile/v1/users/" + userId,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         Accept: "application/json",
-  //       },
-  //     }
-  //   ); // Replace with your Docker container's IP or hostname if needed
-  //   const data = await response.json();
-  //   console.log(data);
-  // };
-  // React.useEffect(() => {
-  //   fetchUser();
-  // }, []);
+  const [user, setUser] = React.useState<User | null>(null);
+  const fetchUser = async () => {
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_DOMAIN}/api/mobile/v1/users/` + userId,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    ); // Replace with your Docker container's IP or hostname if needed
+    const data: UserDataJSON = await response.json();
+    console.log(data);
+    setUser({
+      clerkId: data.Clerk_id,
+      username: data.Username,
+      photoUrl: data.Photo_url,
+    });
+  };
+
+  React.useEffect(() => {
+    fetchUser();
+  }, []);
 
   const SignOut = () => {
     if (!isLoaded) {
@@ -66,6 +77,8 @@ export default function ProfileScreen() {
       />
       <Text>Profile</Text>
       <Text>{userId}</Text>
+      <Text>{user?.username}</Text>
+
       <SafeAreaView style={styles.container}>
         <SignedIn>
           <Text>You are Signed in</Text>
