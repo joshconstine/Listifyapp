@@ -36,7 +36,7 @@ export default function TabOneScreen() {
   const getRecipes = async () => {
     try {
       const response = await fetch(
-        "http://172.21.0.3:8080/api/mobile/v1/recipes",
+        `${process.env.EXPO_PUBLIC_API_DOMAIN}/api/mobile/v1/recipes`,
         {
           method: "GET",
           headers: {

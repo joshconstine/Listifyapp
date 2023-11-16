@@ -73,7 +73,7 @@ export default function CreateRecipeScreen() {
     body.append("Tags", JSON.stringify(recipeTags));
     try {
       const response = await fetch(
-        "http://172.21.0.3:8080/api/mobile/v1/recipes",
+        `${process.env.EXPO_PUBLIC_API_DOMAIN}/api/mobile/v1/recipes`,
         {
           method: "POST",
           headers: {
@@ -101,7 +101,7 @@ export default function CreateRecipeScreen() {
   const getIngredients = async () => {
     try {
       const response = await fetch(
-        "http://172.21.0.3:8080/api/mobile/v1/ingredients",
+        "http://172.23.0.3:8080/api/mobile/v1/ingredients",
         {
           method: "GET",
           headers: {
@@ -122,7 +122,7 @@ export default function CreateRecipeScreen() {
   const getTags = async () => {
     try {
       const response = await fetch(
-        "http://172.21.0.3:8080/api/mobile/v1/tags",
+        "http://172.23.0.3:8080/api/mobile/v1/tags",
         {
           method: "GET",
           headers: {

@@ -16,7 +16,7 @@ export function Page() {
   const getRecipe = async () => {
     try {
       const response = await fetch(
-        "http://172.21.0.3:8080/api/mobile/v1/recipes/" + slug,
+        `${process.env.EXPO_PUBLIC_API_DOMAIN}/api/mobile/v1/recipes/` + slug,
         {
           method: "GET",
           headers: {

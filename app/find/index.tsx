@@ -19,7 +19,7 @@ export function Page() {
   const getIngredients = async () => {
     try {
       const response = await fetch(
-        "http://172.21.0.3:8080/api/mobile/v1/ingredients",
+        `${process.env.EXPO_PUBLIC_API_DOMAIN}/api/mobile/v1/ingredients`,
         {
           method: "GET",
           headers: {
@@ -40,7 +40,7 @@ export function Page() {
   const getRecipes = async () => {
     try {
       const response = await fetch(
-        "http://172.21.0.3:8080/api/mobile/v1/recipes",
+        "http://172.23.0.3:8080/api/mobile/v1/recipes",
         {
           method: "GET",
           headers: {
