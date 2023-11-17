@@ -7,7 +7,7 @@ import {
 
 import { Text, View } from "../../components/Themed";
 import React, { useContext, useEffect, useState } from "react";
-import { Recipe } from "../../types/recipe";
+import { Recipe, Tag } from "../../types/recipe";
 import { Link } from "expo-router";
 import { Image } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -18,7 +18,27 @@ export default function TabOneScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterdRecipes, setFilterdRecipes] = useState<Recipe[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
 
+  const getTags = async () => {
+    try {
+      const response = await fetch(
+        "http://172.23.0.3:8080/api/mobile/v1/tags",
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      ); // Replace with your Docker container's IP or hostname if needed
+      const data = await response.json();
+      setTags(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error  tags. Status:", error);
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
     setFilterdRecipes(
       recipes.filter((recipe) =>
@@ -49,6 +69,7 @@ export default function TabOneScreen() {
 
   useEffect(() => {
     getRecipes();
+    getTags();
   }, []);
   return (
     <View style={styles.container}>
@@ -74,35 +95,43 @@ export default function TabOneScreen() {
             {recipes.length === 0 && (
               <Text style={styles.noRecipesText}>No recipes found</Text>
             )}
-            {filterdRecipes.map((recipe: Recipe) => {
+            {tags.map((tag) => {
               return (
-                <View key={recipe.Recipe_id}>
-                  <Link href={`/recipe/${recipe.Recipe_id}`}>
-                    <View style={styles.recipeItem}>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          width: "100%",
-                        }}
-                      >
-                        <Text style={styles.recipeName}>{recipe.Name}</Text>
-                        <RecipeSelector recipe={recipe} />
-                      </View>
+                <View style={styles.recipeTypeContainer}>
+                  {filterdRecipes.map((recipe: Recipe) => {
+                    return (
+                      <View key={recipe.Recipe_id}>
+                        <Link href={`/recipe/${recipe.Recipe_id}`}>
+                          <View style={styles.recipeItem}>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                width: "100%",
+                              }}
+                            >
+                              <Text style={styles.recipeName}>
+                                {recipe.Name}
+                              </Text>
+                              <RecipeSelector recipe={recipe} />
+                            </View>
 
-                      {recipe.Photos && recipe.Photos.length > 0 ? (
-                        <Image
-                          source={{ uri: recipe.Photos[0] }}
-                          style={styles.recipeImage}
-                        />
-                      ) : (
-                        <Image
-                          source={require("../../assets/images/placeholder.png")}
-                          style={styles.recipeImage}
-                        />
-                      )}
-                    </View>
-                  </Link>
+                            {recipe.Photos && recipe.Photos.length > 0 ? (
+                              <Image
+                                source={{ uri: recipe.Photos[0] }}
+                                style={styles.recipeImage}
+                              />
+                            ) : (
+                              <Image
+                                source={require("../../assets/images/placeholder.png")}
+                                style={styles.recipeImage}
+                              />
+                            )}
+                          </View>
+                        </Link>
+                      </View>
+                    );
+                  })}
                 </View>
               );
             })}
@@ -118,6 +147,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     gap: 8,
+  },
+  recipeTypeContainer: {
+    width: "100%",
+    flex: 1,
+    flexDirection: "row",
+    gap: 16,
   },
 
   loadingIndicator: {
