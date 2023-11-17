@@ -9,7 +9,11 @@ import {
 import { useSignIn } from "@clerk/clerk-expo";
 import Colors from "../constants/Colors";
 
-export default function SignInCard() {
+interface IProps {
+  setShowLogin: (showLogin: boolean) => void;
+}
+
+export default function SignInCard(props: IProps) {
   const { signIn, setActive, isLoaded } = useSignIn();
 
   const [emailAddress, setEmailAddress] = React.useState("");
@@ -33,27 +37,36 @@ export default function SignInCard() {
     }
   };
   const showSignInCard = () => {
-    console.log("show sign in card");
+    props.setShowLogin(false);
   };
   return (
     <View style={styles.card}>
       <View style={styles.topContainer}>
         <Text style={styles.title}>LOG IN</Text>
-        <TextInput
-          autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Email..."
-          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-          style={styles.input}
-        />
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Username</Text>
 
-        <TextInput
-          value={password}
-          placeholder="Password..."
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-          style={styles.input}
-        />
+          <TextInput
+            autoCapitalize="none"
+            value={emailAddress}
+            placeholder="Type your username"
+            onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            value={password}
+            placeholder="Type your password"
+            secureTextEntry={true}
+            onChangeText={(password) => setPassword(password)}
+            style={styles.input}
+          />
+          <TouchableOpacity style={styles.forgot}>
+            <Text style={styles.forgotText}>Forgot password?</Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={onSignInPress}>
           <Text style={styles.actionButton}>LOG IN</Text>
         </TouchableOpacity>
@@ -147,5 +160,17 @@ const styles = StyleSheet.create({
   horizontalGroup: {
     flexDirection: "row",
     gap: 4,
+  },
+  inputGroup: {
+    flexDirection: "column",
+    gap: 4,
+  },
+  label: {},
+  forgotText: {
+    fontWeight: "bold",
+    fontSize: 12,
+  },
+  forgot: {
+    alignSelf: "flex-end",
   },
 });

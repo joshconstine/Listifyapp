@@ -30,6 +30,7 @@ type UserDataJSON = {
 export default function ProfileScreen() {
   const { isLoaded, signOut, userId } = useAuth();
   const [user, setUser] = React.useState<User | null>(null);
+  const [showLogin, setShowLogin] = React.useState<boolean>(true);
   const fetchUser = async () => {
     const response = await fetch(
       `${process.env.EXPO_PUBLIC_API_DOMAIN}/api/mobile/v1/users/` + userId,
@@ -79,8 +80,11 @@ export default function ProfileScreen() {
           <SignOut />
         </SignedIn>
         <SignedOut>
-          {/* <SignUpCard /> */}
-          <SignInCard />
+          {showLogin ? (
+            <SignInCard setShowLogin={setShowLogin} />
+          ) : (
+            <SignUpCard setShowLogin={setShowLogin} />
+          )}
         </SignedOut>
       </SafeAreaView>
     </View>
@@ -93,10 +97,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#d1e0e0",
     alignItems: "center",
     justifyContent: "center",
-  },
-  separator: {
-    height: 1,
-    width: "100%",
-    marginBottom: 20,
   },
 });
