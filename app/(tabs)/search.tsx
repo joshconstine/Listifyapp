@@ -3,6 +3,8 @@ import {
   Button,
   ScrollView,
   StyleSheet,
+  Touchable,
+  TouchableOpacity,
 } from "react-native";
 
 import { Text, View } from "../../components/Themed";
@@ -97,41 +99,49 @@ export default function TabOneScreen() {
             )}
             {tags.map((tag) => {
               return (
-                <View style={styles.recipeTypeContainer}>
-                  {filterdRecipes.map((recipe: Recipe) => {
-                    return (
-                      <View key={recipe.Recipe_id}>
-                        <Link href={`/recipe/${recipe.Recipe_id}`}>
-                          <View style={styles.recipeItem}>
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                width: "100%",
-                              }}
-                            >
-                              <Text style={styles.recipeName}>
-                                {recipe.Name}
-                              </Text>
-                              <RecipeSelector recipe={recipe} />
+                <View style={styles.tagGroup} key={tag.Tag_id}>
+                  <View>
+                    <Text style={styles.tagName}>{tag.Name}</Text>
+                    <TouchableOpacity onPress={() => console.log("pressed")}>
+                      <Text style={styles.tagHelper}>View More</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.recipeTypeContainer}>
+                    {filterdRecipes.map((recipe: Recipe) => {
+                      return (
+                        <View key={recipe.Recipe_id}>
+                          <Link href={`/recipe/${recipe.Recipe_id}`}>
+                            <View style={styles.recipeItem}>
+                              {recipe.Photos && recipe.Photos.length > 0 ? (
+                                <Image
+                                  source={{ uri: recipe.Photos[0] }}
+                                  style={styles.recipeImage}
+                                />
+                              ) : (
+                                <Image
+                                  source={require("../../assets/images/placeholder.png")}
+                                  style={styles.recipeImage}
+                                />
+                              )}
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                  width: "100%",
+                                  paddingHorizontal: 12,
+                                }}
+                              >
+                                <Text style={styles.recipeName}>
+                                  {recipe.Name}
+                                </Text>
+                                {/* <RecipeSelector recipe={recipe} /> */}
+                              </View>
                             </View>
-
-                            {recipe.Photos && recipe.Photos.length > 0 ? (
-                              <Image
-                                source={{ uri: recipe.Photos[0] }}
-                                style={styles.recipeImage}
-                              />
-                            ) : (
-                              <Image
-                                source={require("../../assets/images/placeholder.png")}
-                                style={styles.recipeImage}
-                              />
-                            )}
-                          </View>
-                        </Link>
-                      </View>
-                    );
-                  })}
+                          </Link>
+                        </View>
+                      );
+                    })}
+                  </View>
                 </View>
               );
             })}
@@ -147,6 +157,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     gap: 8,
+  },
+  tagGroup: {
+    flexDirection: "column",
+    gap: 16,
+    width: "100%",
+  },
+  tagName: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  tagHelper: {
+    fontSize: 16,
+    color: "gray",
   },
   recipeTypeContainer: {
     width: "100%",
@@ -166,22 +189,25 @@ const styles = StyleSheet.create({
   recipeItem: {
     borderWidth: 1,
     borderColor: "#ccc",
-    padding: 16,
-    width: 360,
+    width: 140,
     borderRadius: 10,
     flexDirection: "column",
     gap: 8,
     alignItems: "center",
+    paddingBottom: 8,
   },
   recipeImage: {
     width: "100%",
-    height: 260,
-    borderRadius: 10,
+    height: 140,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   recipeName: {
-    fontSize: 20,
+    fontSize: 12,
     fontWeight: "bold",
+    color: "gray",
   },
+
   noRecipesText: {
     fontSize: 16,
     color: "gray",
