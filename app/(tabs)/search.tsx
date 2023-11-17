@@ -100,48 +100,50 @@ export default function TabOneScreen() {
             {tags.map((tag) => {
               return (
                 <View style={styles.tagGroup} key={tag.Tag_id}>
-                  <View>
+                  <View style={styles.tagTitleGroup}>
                     <Text style={styles.tagName}>{tag.Name}</Text>
                     <TouchableOpacity onPress={() => console.log("pressed")}>
                       <Text style={styles.tagHelper}>View More</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.recipeTypeContainer}>
-                    {filterdRecipes.map((recipe: Recipe) => {
-                      return (
-                        <View key={recipe.Recipe_id}>
-                          <Link href={`/recipe/${recipe.Recipe_id}`}>
-                            <View style={styles.recipeItem}>
-                              {recipe.Photos && recipe.Photos.length > 0 ? (
-                                <Image
-                                  source={{ uri: recipe.Photos[0] }}
-                                  style={styles.recipeImage}
-                                />
-                              ) : (
-                                <Image
-                                  source={require("../../assets/images/placeholder.png")}
-                                  style={styles.recipeImage}
-                                />
-                              )}
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  justifyContent: "space-between",
-                                  width: "100%",
-                                  paddingHorizontal: 12,
-                                }}
-                              >
-                                <Text style={styles.recipeName}>
-                                  {recipe.Name}
-                                </Text>
-                                {/* <RecipeSelector recipe={recipe} /> */}
+                  <ScrollView horizontal={true}>
+                    <View style={styles.recipeTypeContainer}>
+                      {filterdRecipes.map((recipe: Recipe) => {
+                        return (
+                          <View key={recipe.Recipe_id}>
+                            <Link href={`/recipe/${recipe.Recipe_id}`}>
+                              <View style={styles.recipeItem}>
+                                {recipe.Photos && recipe.Photos.length > 0 ? (
+                                  <Image
+                                    source={{ uri: recipe.Photos[0] }}
+                                    style={styles.recipeImage}
+                                  />
+                                ) : (
+                                  <Image
+                                    source={require("../../assets/images/placeholder.png")}
+                                    style={styles.recipeImage}
+                                  />
+                                )}
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    paddingHorizontal: 12,
+                                  }}
+                                >
+                                  <Text style={styles.recipeName}>
+                                    {recipe.Name}
+                                  </Text>
+                                  {/* <RecipeSelector recipe={recipe} /> */}
+                                </View>
                               </View>
-                            </View>
-                          </Link>
-                        </View>
-                      );
-                    })}
-                  </View>
+                            </Link>
+                          </View>
+                        );
+                      })}
+                    </View>
+                  </ScrollView>
                 </View>
               );
             })}
@@ -158,13 +160,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
+  tagTitleGroup: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    paddingHorizontal: 16,
+  },
   tagGroup: {
     flexDirection: "column",
     gap: 16,
     width: "100%",
   },
   tagName: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
   },
   tagHelper: {
@@ -172,10 +180,9 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   recipeTypeContainer: {
-    width: "100%",
-    flex: 1,
     flexDirection: "row",
-    gap: 16,
+    gap: 8,
+    paddingHorizontal: 16,
   },
 
   loadingIndicator: {
