@@ -1,4 +1,12 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Image } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import React, { useContext, useEffect, useState } from "react";
@@ -7,9 +15,11 @@ import { Recipe } from "../../types/recipe";
 import { SelectedRecipesContext } from "./selectedRecipesContext";
 import DiscoverCard from "../../components/DiscoverCard";
 import { AntDesign } from "@expo/vector-icons";
+import Colors from "../../constants/Colors";
 export default function TabOneScreen() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const { selectedRecipes, setSelectedRecipes } = useContext(
     SelectedRecipesContext
   );
@@ -67,27 +77,85 @@ export default function TabOneScreen() {
   }
   const overlayText = recipes.length + " Recipes";
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <DiscoverCard />
-        <View>
-          <Image source={{ uri: selectedImage }} style={styles.recipeImage} />
-          <Text style={styles.overlay}>Potato Based Recipes</Text>
-          <Text style={styles.overlayhelper}>{overlayText}</Text>
-          <View style={styles.favoriteContainer}>
-            <AntDesign name="eyeo" size={24} color="white" />
+    <View style={styles.container}>
+      <ImageBackground
+        source={{ uri: selectedImage }}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <View style={styles.innerContainer}>
+          <View style={styles.topGroup}>
+            <DiscoverCard />
+            <TextInput
+              style={{
+                height: 40,
+                borderColor: "#f6f7fc",
+                backgroundColor: "white",
+                borderWidth: 1,
+                width: "100%",
+                borderRadius: 10,
+                padding: 10,
+              }}
+              onChangeText={(text) => setSearch(text)}
+              value={search}
+              placeholder="Discover new recipes"
+            />
+          </View>
+          <View style={styles.bottomGroup}>
+            <Text style={styles.overlay}>This Week's Top Recipes</Text>
+            <Text style={styles.overlayHelper}>
+              Make a delecious dish inspired by this week's most popular recipes
+            </Text>
+            <TouchableOpacity style={styles.discoverWrapper}>
+              <Text style={styles.discoverText}>Discover</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 32,
     gap: 16,
+    height: "100%",
+  },
+  innerContainer: {
+    paddingHorizontal: 32,
+    paddingVertical: 32,
+    backgroundColor: "transparent",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: "100%",
+    width: "100%",
+  },
+  topGroup: {
+    backgroundColor: "transparent",
+    flexDirection: "column",
+    gap: 16,
+  },
+  bottomGroup: {
+    color: "white",
+    backgroundColor: "transparent",
+    width: "100%",
+    alignSelf: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    gap: 8,
+  },
+  discoverWrapper: {
+    backgroundColor: Colors.accent.blue,
+    paddingVertical: 12,
+    width: 140,
+    borderRadius: 30,
+    color: "white",
+    textAlign: "center",
+  },
+  discoverText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
   },
   recipeImage: {
     width: "100%",
@@ -95,23 +163,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   overlay: {
-    position: "absolute",
-    top: 400,
-    left: 16,
     fontSize: 30,
     fontWeight: "bold",
-    color: "white",
-    textShadowColor: "rgba(0, 0, 0, 0.75)",
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
-  },
-  overlayhelper: {
-    position: "absolute",
-    top: 450,
-    left: 16,
-    fontSize: 20,
+    width: 200,
     color: "white",
   },
+  overlayHelper: {
+    fontSize: 16,
+    width: 260,
+    color: "white",
+  },
+
   favoriteContainer: {
     position: "absolute",
     top: 20,

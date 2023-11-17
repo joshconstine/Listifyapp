@@ -64,7 +64,7 @@ export default function TabOneScreen() {
         }}
         onChangeText={(text) => setSearch(text)}
         value={search}
-        placeholder="Search for recipes"
+        placeholder="Discover new recipes"
       />
       <ScrollView>
         {isLoading ? (
