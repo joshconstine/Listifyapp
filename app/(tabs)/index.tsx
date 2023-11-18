@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { Text, View } from "../../components/Themed";
 import React, { useContext, useEffect, useState } from "react";
@@ -80,8 +81,13 @@ export default function TabOneScreen() {
     <View style={styles.container}>
       <ImageBackground
         source={{ uri: selectedImage }}
-        style={{ width: "100%", height: "100%" }}
+        style={styles.backgroundImage}
       >
+        <LinearGradient
+          // Background Linear Gradient
+          colors={["rgba(0,0,0,0.8)", "transparent"]}
+          style={styles.background}
+        />
         <View style={styles.innerContainer}>
           <View style={styles.topGroup}>
             <DiscoverCard />
@@ -120,6 +126,13 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 16,
     height: "100%",
+  },
+  background: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    height: 800,
   },
   innerContainer: {
     paddingHorizontal: 32,
@@ -184,5 +197,16 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     padding: 8,
     borderRadius: 10,
+  },
+  backgroundImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
   },
 });
