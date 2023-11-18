@@ -20,6 +20,7 @@ import { router, useRouter } from "expo-router";
 import Colors from "../../constants/Colors";
 import PlusButton from "../../components/PlusButton";
 import { MinusButton } from "../../components/MinusButton";
+import ImagePickerButton from "../../components/ImagePickerButton";
 
 export type SelectData = {
   key: string;
@@ -138,21 +139,6 @@ export default function CreateRecipeScreen() {
       setIsLoading(false);
     }
   };
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
 
   useEffect(() => {
     getIngredients();
@@ -221,17 +207,11 @@ export default function CreateRecipeScreen() {
           data={data}
           save="value"
         />
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Button title="Pick an image from camera roll" onPress={pickImage} />
-          {image && (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 200, height: 200 }}
-            />
-          )}
-        </View>
+        <ImagePickerButton
+          setImage={setImage}
+          image={image}
+          title="Upload Image"
+        />
         <Button
           title="Create Recipe"
           onPress={handleSubmit}
