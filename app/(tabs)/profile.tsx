@@ -7,15 +7,18 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
 
-import { Text, View } from "../../components/Themed";
+import { Text } from "../../components/Themed";
 
-import { Animated, FlatList, StyleSheet } from "react-native";
+import { Animated, FlatList, StyleSheet, Image } from "react-native";
 import { Sign } from "crypto";
 import SignInCard from "../../components/SignInCard";
 import SignUpCard from "../../components/SignUpCard";
+import ImagePickerButton from "../../components/ImagePickerButton";
+import Colors from "../../constants/Colors";
 
 export type User = {
   clerkId: string;
@@ -83,6 +86,12 @@ export default function ProfileScreen() {
           body: body,
         }
       ); // Replace with your Docker container's IP or hostname if needed`
+      const createdUser = await response.json();
+      setUser({
+        clerkId: createdUser.Clerk_id,
+        username: createdUser.Username,
+        photoUrl: createdUser.Photo_url,
+      });
     } catch (error) {
       console.error("Error updateing user info:", error);
     }
@@ -106,21 +115,47 @@ export default function ProfileScreen() {
       </View>
     );
   };
-
+  const photoSource =
+    user?.photoUrl ||
+    "https://foodly-bucket.s3.us-west-1.amazonaws.com/listify/potato.jpeg";
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
         <SignedIn>
-          <Text>Profile</Text>
-          <Text>{userId}</Text>
-          <TextInput
-            style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-            onChangeText={handleInputChange}
-            value={usernameInput}
-          />
-          <Text>{user?.username}</Text>
-          <Text>You are Signed in</Text>
-          <SignOut />
+          <View style={styles.profileContainer}>
+            <View>
+              <Text>Edit profile</Text>
+              <TextInput
+                style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+                onChangeText={handleInputChange}
+                value={usernameInput}
+              />
+              <ImagePickerButton
+                setImage={setImage}
+                image={image}
+                aspect={[1, 1]}
+                title="Pick a profile picture"
+              />
+              <TouchableOpacity
+                onPress={handleSubmit}
+                style={styles.submitButton}
+              >
+                <Text>Submit</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <Text>Profile</Text>
+              <Text>{userId}</Text>
+              <Image
+                source={{ uri: photoSource }}
+                style={styles.profileImage}
+              />
+
+              <Text>{user?.username}</Text>
+              <Text>You are Signed in</Text>
+              <SignOut />
+            </View>
+          </View>
         </SignedIn>
         <SignedOut>
           {showLogin ? (
@@ -140,5 +175,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#d1e0e0",
     alignItems: "center",
     justifyContent: "center",
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 100 / 2,
+  },
+
+  profileContainer: {
+    flex: 1,
+    backgroundColor: "#d1e0e0",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  submitButton: {
+    backgroundColor: Colors.accent.darker,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    padding: 10,
   },
 });
