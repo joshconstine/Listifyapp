@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Button,
@@ -30,11 +30,12 @@ type UserDataJSON = {
 
 export default function ProfileScreen() {
   const { isLoaded, signOut, userId } = useAuth();
-  const [user, setUser] = React.useState<User | null>(null);
-  const [usernameInput, setUsernameInput] = React.useState<string>(
+  const [user, setUser] = useState<User | null>(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [usernameInput, setUsernameInput] = useState<string>(
     user?.username || ""
   );
-  const [showLogin, setShowLogin] = React.useState<boolean>(true);
+  const [showLogin, setShowLogin] = useState<boolean>(true);
   const fetchUser = async () => {
     const response = await fetch(
       `${process.env.EXPO_PUBLIC_API_DOMAIN}/api/mobile/v1/users/` + userId,
@@ -55,13 +56,41 @@ export default function ProfileScreen() {
     setUsernameInput(data.Username || "");
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchUser();
   }, []);
 
+  const handleSubmit = async () => {
+    let body = new FormData();
+    // @ts-ignore
+    body.append("photo", {
+      uri: image,
+      name: "image.jpeg",
+      type: "image/jpeg",
+    });
+    body.append("Content-Type", "image/jpeg");
+    body.append("Username", usernameInput);
+
+    try {
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_DOMAIN}/api/mobile/v1/users/` + userId,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+          body: body,
+        }
+      ); // Replace with your Docker container's IP or hostname if needed`
+    } catch (error) {
+      console.error("Error updateing user info:", error);
+    }
+  };
   const handleInputChange = (text: string) => {
     setUsernameInput(text);
   };
+
   const SignOut = () => {
     if (!isLoaded) {
       return null;
