@@ -5,6 +5,7 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
+  TextInput,
   TouchableOpacity,
 } from "react-native";
 import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
@@ -30,6 +31,9 @@ type UserDataJSON = {
 export default function ProfileScreen() {
   const { isLoaded, signOut, userId } = useAuth();
   const [user, setUser] = React.useState<User | null>(null);
+  const [usernameInput, setUsernameInput] = React.useState<string>(
+    user?.username || ""
+  );
   const [showLogin, setShowLogin] = React.useState<boolean>(true);
   const fetchUser = async () => {
     const response = await fetch(
@@ -48,12 +52,16 @@ export default function ProfileScreen() {
       username: data.Username,
       photoUrl: data.Photo_url,
     });
+    setUsernameInput(data.Username || "");
   };
 
   React.useEffect(() => {
     fetchUser();
   }, []);
 
+  const handleInputChange = (text: string) => {
+    setUsernameInput(text);
+  };
   const SignOut = () => {
     if (!isLoaded) {
       return null;
@@ -69,12 +77,18 @@ export default function ProfileScreen() {
       </View>
     );
   };
+
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
         <SignedIn>
           <Text>Profile</Text>
           <Text>{userId}</Text>
+          <TextInput
+            style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+            onChangeText={handleInputChange}
+            value={usernameInput}
+          />
           <Text>{user?.username}</Text>
           <Text>You are Signed in</Text>
           <SignOut />
