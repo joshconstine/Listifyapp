@@ -14,7 +14,6 @@ import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
 import { Text } from "../../components/Themed";
 
 import { Animated, FlatList, StyleSheet, Image } from "react-native";
-import { Sign } from "crypto";
 import SignInCard from "../../components/SignInCard";
 import SignUpCard from "../../components/SignUpCard";
 import ImagePickerButton from "../../components/ImagePickerButton";
